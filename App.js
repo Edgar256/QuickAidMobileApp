@@ -22,6 +22,7 @@ import {
   NewsProfile,
   NewsProfileAnalytics,
   NewsProfileComments,
+  SplashScreen,
 } from './screens';
 
 const theme = {
@@ -37,7 +38,14 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={'Start'}>
+      <Stack.Navigator initialRouteName={'SplashScreen'}>
+        <Stack.Screen
+          name="SplashScreen"
+          options={{
+            headerShown: false,
+          }}
+          component={SplashScreen}
+        />
         <Stack.Screen
           name="Start"
           options={{

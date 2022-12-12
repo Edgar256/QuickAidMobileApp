@@ -20,7 +20,6 @@
     "@react-navigation/material-top-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.16",
     "@react-navigation/stack": "^6.3.7",
-    "@stripe/stripe-react-native": "^0.22.1",
     "axios": "^1.2.1",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "jwt-decode": "^3.1.2",

@@ -117,7 +117,7 @@ function AppDrawerStack() {
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         drawerStyle: {
-          width: '75%',
+          width: '80%',
           backgroundColor: COLORS.grayDark,
           headerBackground: COLORS.grayDark,
           headerTintColor: COLORS.white,

@@ -155,34 +155,34 @@ export default function Register({navigation}) {
 
       setIsLoading(true);
 
-        await axios
-          .post(`${apiURL}/users/register`, payload)
-          .then(res => {
-            alert(
-              'We are processing your details and creating your account.' +
-                'Your results are based off your details to give you the best experience using BIG DATA',
-            );
+      await axios
+        .post(`${apiURL}/users/register`, payload)
+        .then(res => {
+          alert(
+            'We are processing your details and creating your account.' +
+              'Your results are based off your details to give you the best experience using BIG DATA',
+          );
 
-            return res.data;
-          })
-          .then(data => {
-            if (data.success === true) {
-              setTimeout(() => {
-                alert(
-                  'Your account has been successfully created, please check your email for an ACTIVATION LINK in 30 seconds.' +
-                    ' Be sure to also check your SPAM folder if you do not see the email link in your INBOX.' +
-                    ' If you do not get an activation link , please register again.',
-                );
-                setIsLoading(false);
-                navigation.navigate('Login');
-              }, 30000);
-              return data;
-            } else {
-              alert(data.error);
+          return res.data;
+        })
+        .then(data => {
+          if (data.success === true) {
+            setTimeout(() => {
+              alert(
+                'Your account has been successfully created, please check your email for an ACTIVATION LINK in 30 seconds.' +
+                  ' Be sure to also check your SPAM folder if you do not see the email link in your INBOX.' +
+                  ' If you do not get an activation link , please register again.',
+              );
               setIsLoading(false);
-              return data;
-            }
-          });
+              navigation.navigate('Login');
+            }, 30000);
+            return data;
+          } else {
+            alert(data.error);
+            setIsLoading(false);
+            return data;
+          }
+        });
     } catch (err) {
       return err;
     }
@@ -259,7 +259,7 @@ export default function Register({navigation}) {
                 <View
                   style={{
                     width: '40%',
-                    // backgroundColor: '#000000',
+                    backgroundColor: '#000000',
                     paddingVertical: 0,
                   }}>
                   <TouchableOpacity
@@ -267,15 +267,16 @@ export default function Register({navigation}) {
                     style={{
                       width: '100%',
                       height: 40,
-                      backgroundColor: 'black',
+                      // backgroundColor: 'black',
                       padding: 5,
                     }}>
                     <Text
                       style={{
                         color: 'white',
-                        fontSize: 20,
+                        fontSize: 16,
+                        padding: 5,
                       }}>
-                      {countryCodeFull}
+                      {countryCodeFull ? countryCodeFull : 'Country Code'}
                     </Text>
                   </TouchableOpacity>
                   <CountryPicker
@@ -309,12 +310,15 @@ export default function Register({navigation}) {
                       width: '100%',
                       zIndex: 101,
                     }}>
-                    <View>
+                    <View style={{
+                          flex:1,
+                        }}>
                       <Text
                         style={{
                           color: COLORS.black,
                           fontSize: 13,
                           marginRight: 10,
+                          width: '90%',
                         }}>
                         Select Community
                       </Text>

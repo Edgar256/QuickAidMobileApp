@@ -24,7 +24,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import Config from 'react-native-config';
-import { CardField, useStripe } from '@stripe/stripe-react-native';
+// import { CardField, useStripe } from '@stripe/stripe-react-native';
 
 // import {
 //   CreditCardInput,

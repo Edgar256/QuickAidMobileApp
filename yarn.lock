@@ -1425,11 +1425,6 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stripe/stripe-react-native@^0.22.1":
-  "integrity" "sha512-L4UjvhgZir+jNvXS4lCNv8C8xWYOtH+n1YFAhuKVxA2tuRvWz2lJJ7U4bOpl3cJn1tPvIsvroCWx/Nra5Fgmgw=="
-  "resolved" "https://registry.npmjs.org/@stripe/stripe-react-native/-/stripe-react-native-0.22.1.tgz"
-  "version" "0.22.1"
-
 "@svgr/babel-plugin-add-jsx-attribute@^6.5.1":
   "integrity" "sha512-9PYGcXrAxitycIjRmZB+Q0JaN07GZIWaTBIGQzfaZv+qr1n8X1XUEJ5rZ/vx6OVD9RRYlrNnXWExQXcmZeD/BQ=="
   "resolved" "https://registry.npmjs.org/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-6.5.1.tgz"

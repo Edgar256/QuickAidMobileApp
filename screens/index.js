@@ -28,7 +28,7 @@ import JobProfileAnalytics from './JobProfileAnalytics';
 import NewsProfile from './NewsProfile';
 import NewsProfileAnalytics from './NewsProfileAnalytics';
 import NewsProfileComments from './NewsProfileComments';
-
+import SplashScreen from './SplashScreen';
 import Logout from './Logout';
 
 export {
@@ -62,6 +62,6 @@ export {
   NewsProfile,
   NewsProfileAnalytics,
   NewsProfileComments,
-
+  SplashScreen,
   Logout,
 };
