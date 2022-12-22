@@ -28,8 +28,6 @@
     "react-native": "0.70.6",
     "react-native-config": "^1.4.11",
     "react-native-country-codes-picker": "^2.2.2",
-    "react-native-credit-card-input": "^0.4.1",
-    "react-native-credit-card-input-plus": "^0.4.4",
     "react-native-date-picker": "^4.2.6",
     "react-native-dotenv": "^3.4.6",
     "react-native-gesture-handler": "^2.8.0",
