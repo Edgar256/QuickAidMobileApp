@@ -52,122 +52,28 @@ export default function NewsFeed({navigation}) {
       let USER;
       let DEFAULT_COMMUNITY;
 
-      const TOKEN_ID = await AsyncStorage.getItem('token').then(res => {
-        if (!res) {
-          return navigation.navigate('Login');
-        }
-        return jwt_decode(res).id;
-      });
+      // const TOKEN_ID = await AsyncStorage.getItem('token').then(res => {
+      //   if (!res) {
+      //     return navigation.navigate('Login');
+      //   }
+      //   return jwt_decode(res).id;
+      // });
 
-      if (!TOKEN_ID) {
-        return navigation.navigate('Login');
-      }
+      // if (!TOKEN_ID) {
+      //   return navigation.navigate('Login');
+      // }
 
-      await axios.get(`${apiURL}/users/${TOKEN_ID}`).then(res => {
-        if (res.data.success === true) {
-          DEFAULT_COMMUNITY = res.data.message.community;
-          CURRENT_COMMUNITIY = res.data.message.community;
+      
 
-          setCurrentCommunity(res.data.message.community);
-          return (USER = res.data.message);
-        } else {
-          console.log(res.data.error);
-          alert('OOOPPP ---! Something went wrong');
-        }
-      });
+         
 
-      await axios
-        .get(`${apiURL}/news/community/active/${USER.community.id}`)
-        .then(res => {
-          if (res.data.success === true) {
-            setNews(res.data.message.reverse());
-            setIsLoading(false);
-          } else {
-            alert('Something went wrong');
-          }
-        });
-
-      await axios.get(`${apiURL}/news/vip/`).then(res => {
-        if (res.data.success === true) {
-          let arr = res.data.message.filter(elem => {
-            return elem.billing === 'VIP';
-          });
-          setVipNews(arr.reverse());
-          // setIsLoading(false);
-        } else {
-          alert('Something went wrong');
-        }
-      });
-
-      await axios.get(`${apiURL}/communities/`).then(res => {
-        if (res.data.success === true) {
-          let COMMUNITIES = res.data.message.filter(
-            elem => elem.id !== DEFAULT_COMMUNITY.id,
-          );
-          let ALL_COMMUNITY = COMMUNITIES.filter(
-            elem => elem.name === 'All Ugandan Communities',
-          )[0];
-
-          let FILTERED_COMMUNITIES = COMMUNITIES.filter(
-            elem => elem.id !== ALL_COMMUNITY.id,
-          );
-
-          FILTERED_COMMUNITIES.unshift(ALL_COMMUNITY);
-          FILTERED_COMMUNITIES.unshift(DEFAULT_COMMUNITY);
-
-          setCommunities(FILTERED_COMMUNITIES);
-          setIsLoading(false);
-        } else {
-          alert('Something went wrong');
-        }
-      });
-
-      await axios.get(`${apiURL}/feedbacks/users/${TOKEN_ID}`).then(res => {
-        if (res.data.success === true) {
-          let feedbackArray = [];
-          let replyArray = [];
-          res.data.message.map(elem => {
-            elem.replies.map(item => replyArray.push(item));
-          });
-          res.data.message.map(elem => {
-            feedbackArray.push(elem)
-          });
-          let unReadReplies = replyArray.filter(elem => elem.isUserRead === false);
-          let unReadFeedback = feedbackArray.filter(elem => elem.isUserRead === false);
-          return setReplyCount(unReadReplies.length + unReadFeedback.length);
-        } else {
-          setRefreshing(false);
-          alert('OOOPPPS ! Something went wrong');
-        }
-      });
+      
     } catch (error) {
       return error;
     }
   }
 
-  async function filterNewsByCommunity(id) {
-    try {
-      setIsLoading(true);
-      CURRENT_COMMUNITIY = id;
-      await axios.get(`${apiURL}/communities/${id}`).then(res => {
-        if (res.data.success === true) {
-          setCurrentCommunity(res.data.message);
-        } else {
-          alert('OOOPPP ! Something went wrong');
-        }
-      });
-      await axios.get(`${apiURL}/news/community/active/${id}`).then(res => {
-        if (res.data.success === true) {
-          setNews(res.data.message.reverse());
-          setIsLoading(false);
-        } else {
-          alert('Something went wrong');
-        }
-      });
-    } catch (error) {
-      return error;
-    }
-  }
+  
 
   useEffect(() => {
     (async () => {
@@ -257,99 +163,10 @@ export default function NewsFeed({navigation}) {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            padding: 10,
-            flexDirection: 'row',
-            borderBottomWidth: 2,
-            borderBottomColor: COLORS.yellow,
-          }}>
-          {communities.map(elem => {
-            if (currentCommunity.id === elem.id) {
-              return (
-                <TouchableOpacity
-                  onPress={() => filterNewsByCommunity(elem.id)}
-                  style={[styles.filter, styles.active]}
-                  key={elem.id}>
-                  <Text style={styles.filterTextActive}>{elem.name}</Text>
-                </TouchableOpacity>
-              );
-            } else {
-              return (
-                <TouchableOpacity
-                  onPress={() => filterNewsByCommunity(elem.id)}
-                  style={[styles.filter]}
-                  key={elem.id}>
-                  <Text style={styles.filterText}>{elem.name}</Text>
-                </TouchableOpacity>
-              );
-            }
-          })}
-        </ScrollView>
+       
+       
 
-        {/* AD CAROUSEL */}
-        <View style={{padding: 10, position: 'relative'}}>
-          <BackgroundCarousel
-            images={carouselImages}
-            data={vipNews}
-            navigation={navigation}
-            item={'news'}
-          />
-          {/* <CustomCarousel data={vipNews}/> */}
-        </View>
-
-        <View
-          style={{
-            padding: 10,
-            borderBottomColor: COLORS.yellow,
-            borderBottomWidth: 2,
-          }}>
-          <Text style={{color: COLORS.white, fontSize: SIZES.text2}}>
-            What's happening in {currentCommunity.name} ?
-          </Text>
-        </View>
-        <View style={{padding: 10}}>
-          {isLoading ? (
-            <CustomLoaderSmall />
-          ) : (
-            <View>
-              {news.length < 1 ? (
-                <View style={{width: '100%', alignItems: 'center'}}>
-                  <Text>No results found</Text>
-                </View>
-              ) : (
-                news.map(newsItem => {
-                  return (
-                    <NewsCard
-                      key={newsItem.id}
-                      image={newsItem.imageURL}
-                      title={newsItem.title}
-                      description={newsItem.description}
-                      category={
-                        newsItem.category === null
-                          ? 'NO CATEGORY'
-                          : newsItem.category.name
-                      }
-                      billing={newsItem.billing}
-                      dateCreated={newsItem.dateCreated}
-                      // openNewsProfile={() =>
-                      //   openNewsProfile(newsItem.id, newsItem.category.id)
-                      // }
-                      openNewsProfile={() =>
-                        newsItem.category
-                          ? openNewsProfile(newsItem.id, newsItem.category.id)
-                          : openNewsProfile(newsItem.id, '')
-                      }
-                      navigation={navigation}
-                    />
-                  );
-                })
-              )}
-            </View>
-          )}
-        </View>
+        
       </ScrollView>
     </SafeAreaView>
   );

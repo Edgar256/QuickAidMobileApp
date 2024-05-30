@@ -9,8 +9,8 @@ import AppDrawerStack from './navigations/AppDrawerStack';
 import {
   Start,
   HomeScreen,
-  Login,
-  Register,
+  PatientLogin,
+  PatientRegister,
   InboxDetails,
   BusinessProfile,
   BusinessProfileAnalytics,
@@ -56,18 +56,18 @@ export default function App() {
             component={Start}
           />
           <Stack.Screen
-            name="Login"
+            name="PatientLogin"
             options={{
               headerShown: false,
             }}
-            component={Login}
+            component={PatientLogin}
           />
           <Stack.Screen
-            name="Register"
+            name="PatientRegister"
             options={{
               headerShown: false,
             }}
-            component={Register}
+            component={PatientRegister}
           />
           <Stack.Screen
             name="HomeScreen"

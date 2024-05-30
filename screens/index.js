@@ -1,6 +1,15 @@
 import Start from './Start';
-import Register from './Register';
-import Login from './Login';
+import PatientRegister from './patient/Register';
+import PatientLogin from './patient/Login';
+import PatientHome from './patient/Home'
+import PatientAccount from './patient/Account'
+import PatientBlogs from './patient/Blogs'
+import PatientBlog from './patient/Blog'
+import PatientRequests from './patient/Requests'
+import PatientHistory from './patient/History'
+import PatientInviteFriends from './patient/InviteFriends'
+import PatientLogout from './patient/Logout'
+
 import HomeScreen from './HomeScreen';
 import SettingsScreen from './SettingsScreen';
 import EventListing from './EventListing';
@@ -33,8 +42,17 @@ import Logout from './Logout';
 
 export {
   Start,
-  Register,
-  Login,
+  PatientRegister,
+  PatientLogin,
+  PatientHome,
+  PatientAccount,
+  PatientBlogs,
+  PatientBlog,
+  PatientRequests,
+  PatientHistory,
+  PatientInviteFriends,
+  PatientLogout,
+
   HomeScreen,
   NotificationScreen,
   SettingsScreen,

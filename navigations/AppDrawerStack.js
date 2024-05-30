@@ -10,16 +10,14 @@ import Animated from 'react-native-reanimated';
 
 // CUSTOM IMPORTS
 import BottomTabNavigator from './BottomTabNavigator';
-import {
-  NotificationScreen,
-  Inbox,
-  Feedback,
-  PremiumServices,
-  PaymentHistory,
+import {  
   Settings,
-  InviteFriends,
   Logout,
-  MyAdvertsActive,
+  PatientHistory,
+  PatientRequests,
+  PatientBlogs,
+  PatientInviteFriends,
+  PatientLogout,
 } from '../screens';
 import {COLORS} from '../constants';
 import {
@@ -50,7 +48,7 @@ function CustomDrawerContent(props) {
           <View style={{paddingTop: 100, padding: 10}}>
             <Text
               style={{color: COLORS.yellow, fontSize: 11, textAlign: 'center'}}>
-              Ugalav &copy; 2022. All Rights Reserved - Version 1.0.2
+              Edgar256 &copy; 2024. All Rights Reserved - Version 1.0.0
             </Text>
             <View
               style={{
@@ -60,7 +58,7 @@ function CustomDrawerContent(props) {
                 alignSelf: 'center',
               }}>
               <TouchableOpacity
-                onPress={() => Linking.openURL(`https://terms.ugalav.com`)}>
+                onPress={() => Linking.openURL(`https://edgar256.github.io/`)}>
                 <Text
                   style={{
                     color: COLORS.yellow,
@@ -79,9 +77,7 @@ function CustomDrawerContent(props) {
                 {'   '}|{'   '}
               </Text>
               <TouchableOpacity
-                onPress={() =>
-                  Linking.openURL(`https://terms.ugalav.com/privacy.html`)
-                }>
+                onPress={() => Linking.openURL(`https://test.html`)}>
                 <Text
                   style={{
                     color: COLORS.yellow,
@@ -103,7 +99,7 @@ const Drawer = createDrawerNavigator();
 
 const HEADER_OPTIONS = {
   headerStyle: {
-    backgroundColor: COLORS.grayDark,
+    backgroundColor: COLORS.red,
   },
   headerTintColor: COLORS.white,
   headerTitleAlign: 'center',
@@ -112,94 +108,58 @@ const HEADER_OPTIONS = {
 function AppDrawerStack() {
   return (
     <Drawer.Navigator
-      initialRouteName="Community Listings"
+      initialRouteName="Home"
       useLegacyImplementation
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         drawerStyle: {
           width: '80%',
-          backgroundColor: COLORS.grayDark,
-          headerBackground: COLORS.grayDark,
+          backgroundColor: COLORS.red,
+          headerBackground: COLORS.red,
           headerTintColor: COLORS.white,
         },
         drawerActiveTintColor: COLORS.yellow,
         drawerInactiveTintColor: COLORS.white,
       }}>
       <Drawer.Screen
-        name="Community Listings"
+        name="Home"
         component={BottomTabNavigator}
         options={HEADER_OPTIONS}
       />
-      <Drawer.Screen name="Inbox" component={Inbox} options={HEADER_OPTIONS} />
       <Drawer.Screen
-        name="Feedback"
-        component={Feedback}
+        name="Medical History"
+        component={PatientHistory}
         options={HEADER_OPTIONS}
       />
       <Drawer.Screen
-        name="My Adverts & Posting History"
-        component={MyAdvertsActive}
+        name="My Past Requests"
+        component={PatientRequests}
         options={HEADER_OPTIONS}
       />
       <Drawer.Screen
-        name="Premium Services"
-        component={PremiumServices}
+        name="Order Ambulance"
+        component={PatientRequests}
         options={HEADER_OPTIONS}
       />
       <Drawer.Screen
-        name="Payment History"
-        component={PaymentHistory}
-        options={{
-          headerStyle: {
-            backgroundColor: COLORS.grayDark,
-          },
-          headerTintColor: COLORS.white,
-          headerTitleAlign: 'center',
-        }}
-      />
-      <Drawer.Screen
-        name="Notifications"
-        component={NotificationScreen}
-        options={{
-          headerStyle: {
-            backgroundColor: COLORS.grayDark,
-          },
-          headerTintColor: COLORS.white,
-          headerTitleAlign: 'center',
-        }}
+        name="Blogs"
+        component={PatientBlogs}
+        options={HEADER_OPTIONS}
       />
       <Drawer.Screen
         name="Settings"
         component={Settings}
-        options={{
-          headerStyle: {
-            backgroundColor: COLORS.grayDark,
-          },
-          headerTintColor: COLORS.white,
-          headerTitleAlign: 'center',
-        }}
+        options={HEADER_OPTIONS}
       />
       <Drawer.Screen
-        name="Invite Friends to Ugalav Family"
-        component={InviteFriends}
-        options={{
-          headerStyle: {
-            backgroundColor: COLORS.grayDark,
-          },
-          headerTintColor: COLORS.white,
-          headerTitleAlign: 'center',
-        }}
+        name="Invite Friends to QuickAid"
+        component={PatientInviteFriends}
+        options={HEADER_OPTIONS}
       />
       <Drawer.Screen
         name="LogOut"
-        component={Logout}
-        options={{
-          headerStyle: {
-            backgroundColor: COLORS.grayDark,
-          },
-          headerTintColor: COLORS.white,
-          headerTitleAlign: 'center',
-        }}
+        component={PatientLogout}
+        options={HEADER_OPTIONS}
       />
     </Drawer.Navigator>
   );

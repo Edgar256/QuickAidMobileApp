@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwt_decode from 'jwt-decode';
 
 // CUSTOM IMPORTS
-import {COLORS} from '../constants';
+import {COLORS} from '../../constants';
 
 function Logout({navigation}) {
   useEffect(() => {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: COLORS.grayDark,
+    backgroundColor: COLORS.white,
   },
 });
 

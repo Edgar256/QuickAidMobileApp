@@ -15,19 +15,23 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
 // RESOURCE IMPORTS
-import images from '../constants/images';
-import {COLORS, SIZES} from '../constants';
+import images from '../../constants/images';
+import {COLORS, SIZES} from '../../constants';
 // import
 
 // CUSTOM COMPONENT IMPORTS
-import {CustomLoaderSmall, CustomTextInput} from '../components';
+import {CustomLoaderSmall, CustomTextInput} from '../../components';
 
 // API URL
-import {apiURL} from '../utils/apiURL';
+import {apiURL} from '../../utils/apiURL';
+import AlertDanger from '../../components/AlertDanger';
+import AlertSuccess from '../../components/AlertSuccess';
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -41,15 +45,17 @@ export default function Login({navigation}) {
         return alert('Email field cannot be blank');
       }
       if (!regexEmail.test(email)) {
-        return alert('Please enter a Valid Email Address');
+        return setError('Please enter a Valid Email Address');
       }
+      setError("")
 
       if (!password) {
-        return alert('Password field cannot be blank');
+        return setError('Password field cannot be blank');
       }
       if (password.length < 6) {
-        return alert('Password must be atleast 6 characters');
+        return setError('Password must be atleast 6 characters');
       }
+      setError("")
 
       const payload = {
         email: email.toLowerCase(),
@@ -58,24 +64,26 @@ export default function Login({navigation}) {
 
       setIsLoading(true);
 
-      await axios
-        .post(`${apiURL}/users/login`, payload)
-        .then(res => {
+      axios.post(`${apiURL}/users/signin`, payload).then(res => {
+        if (res.data.status === 200) {
           setIsLoading(false);
-          return res.data;
-        })
-        .then(data => {
-          if (data.success === true) {
-            AsyncStorage.setItem('token', data.message);
-            AsyncStorage.setItem('id', jwt_decode(data.message).id);
-            // return navigation.navigate('CommunityListing');
+          AsyncStorage.setItem('token', res.data.token);
+          AsyncStorage.setItem('id', res.data.id);
+          setSuccessMessage('Login Successful');
+          setTimeout(() => {
             return navigation.navigate('AppDrawerStack');
-          } else {
-            alert(data.error);
-            return data;
-          }
-        });
+          }, 1500);
+        } else if (res.data.status === 401) {
+          setError("Wrong login Credentials");
+          return setIsLoading(false);
+        } else {
+          setError('server error.');
+          return setIsLoading(false);
+        }
+      });
+      
     } catch (err) {
+      setIsLoading(false)
       return err;
     }
   }
@@ -119,6 +127,10 @@ export default function Login({navigation}) {
               onChangeText={text => setPassword(text)}
             />
           </View>
+
+          {error && <AlertDanger text={error} />}
+          {successMessage && <AlertSuccess text={successMessage} />}
+
           {isLoading ? (
             <CustomLoaderSmall />
           ) : (

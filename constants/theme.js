@@ -4,11 +4,17 @@ const windowHeight = Dimensions.get('window').height;
 
 export const COLORS = {
   // base colors
-  primary: '#EE3B26',
   success: '#FFCC09',
   red: '#EB2226',
   orange: '#F89A1E',
   yellow: '#F0E91A',
+
+  primary: '#DF3A26',
+  secondary: '#EE4D9C',
+  success: '#A8DD1F',
+  danger: '#ED1C24',
+  lightGreen:"#00ff3c8c",
+  
 
   // colors
   black: '#0A0A0A',

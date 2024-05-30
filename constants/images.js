@@ -1,6 +1,6 @@
 //PNG IMAGES
-export const MainBgImg = require('../assets/images/main-bg.png');
-export const Logo = require('../assets/images/ugalav-logo.fw.png');
+export const MainBgImg = require('../assets/images/background.jpg');
+export const Logo = require('../assets/images/logo.png');
 export const BackArrow = require('../assets/images/back-arrow.png');
 export const NavToggle = require('../assets/images/nav-toggle.png');
 export const NoFeedBack = require('../assets/images/NoFeedback.png');

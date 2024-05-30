@@ -39,11 +39,25 @@ export default function Start({navigation}) {
           onPress={() => navigation.navigate('Welcome')}>
           <Image source={images.Logo} style={{width: 200, height: 230}} />
         </View>
+        <View style={styles.bodyText}>
+          <Text style={styles.textBody}>Welcome to QuickAid</Text>
+          <Text style={styles.textBody}>
+            Your trusted First Aid and Ambulance Services App!
+          </Text>
+          <Text style={styles.textBody}>
+            Access instant first aid guidance , emergeny ambulance services,
+            medical historystorage, and informative blogs.
+          </Text>
+          <Text style={styles.textBody}>
+            Download now for peace of mind during medical emergencies
+          </Text>
+        </View>
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('Register')}>
-            <Text style={styles.text}>Continue</Text>
+            onPress={() => navigation.navigate('PatientRegister')}>
+            <Text style={styles.text}>Get Started</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -54,6 +68,15 @@ export default function Start({navigation}) {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+  },
+  bodyText: {
+    padding: 8,
+  },
+  textBody: {
+    fontSize: 14,
+    color: COLORS.white,
+    textAlign: 'center',
+    paddingBottom: 8,
   },
   start: {
     alignItems: 'center',

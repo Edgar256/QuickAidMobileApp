@@ -1,16 +1,21 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // CUSTOM IMPORTS
 import {
+  PatientHome,
+  PatientAccount,
+
   EventListing,
   BusinessListing,
   JobListing,
   NewsFeed,
   NewItem,
+  PatientBlogs,
+  PatientRequests,
+  PatientHistory,
 } from '../screens';
 import {COLORS} from '../constants';
 
@@ -19,68 +24,71 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="NewsFeed"
+      initialRouteName="PatientHome"
       screenOptions={({route}) => ({
         tabBarActiveTintColor: COLORS.yellow,
         tabBarOptions: {
           showIcon: true,
         },
         tabBarStyle: {
-          backgroundColor: COLORS.maroon,
+          backgroundColor: COLORS.red,
         },
         tabBarInactiveTintColor: COLORS.white,
       })}>
       <Tab.Screen
-        name="Events"
+        name="History"
         options={{
           headerShown: false,
-          tabBarLabel: 'Events',
+          tabBarLabel: 'Medical History',
           tabBarIcon: ({color, size}) => (
-            <Ionicons name="calendar-sharp" color={color} size={size} />
+            <Ionicons name="apps" color={color} size={size} />
           ),
         }}
-        component={EventListing}
+        component={PatientHistory}
       />
       <Tab.Screen
-        name="Businesses"
+        name="Requests"
         options={{
           headerShown: false,
+          tabBarLabel: 'Requests',
           tabBarIcon: ({color, size}) => (
-            <Icon name="handshake" color={color} size={size} />
+            <Icon name="plus-square" color={color} size={size} />
           ),
         }}
-        component={BusinessListing}
+        component={PatientRequests}
       />
       <Tab.Screen
-        name="Jobs"
+        name="PatientHome"
         options={{
           headerShown: false,
+          tabBarLabel: 'Order Ambulance',
           tabBarIcon: ({color, size}) => (
-            <Icon name="hand-holding-usd" color={color} size={size} />
+            <Icon name="ambulance" color={color} size={size} />
           ),
         }}
-        component={JobListing}
+        component={PatientHome}
       />
       <Tab.Screen
-        name="NewsFeed"
+        name="My Account"
         options={{
           headerShown: false,
+          tabBarLabel: 'My Account',
           tabBarIcon: ({color, size}) => (
-            <Icon name="users" color={color} size={size} />
+            <Icon name="user" color={color} size={size} />
           ),
         }}
-        component={NewsFeed}
+        component={PatientAccount}
       />
       <Tab.Screen
-        name="NewItem"
+        name="Blogs"
         options={{
           headerShown: false,
-          tabBarLabel: () => null,
+          tabBarLabel: 'Blogs',
           tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons name="plus" color={color} size={50} />
+            <Icon name="newspaper-o" color={color} size={size} />
           ),
         }}
-        component={NewItem}
+        component={PatientBlogs}
       />
     </Tab.Navigator>
   );
