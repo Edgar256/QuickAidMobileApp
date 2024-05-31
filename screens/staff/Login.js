@@ -66,7 +66,7 @@ export default function Login({navigation}) {
       setIsLoading(true);
 
       axios
-        .post(`${apiURL}/users/signin`, payload)
+        .post(`${apiURL}/staff/signin`, payload)
         .then(res => {
           if (res.data.status === 200) {
             setIsLoading(false);
@@ -114,8 +114,8 @@ export default function Login({navigation}) {
                 textAlign: 'center',
                 fontSize: 16,
               }}>
-              Login to explore as a Patient to explore the amazing opportunities
-              in our App
+              Login to explore as a Medical Personel to explore the amazing
+              opportunities in our App
             </Text>
           </View>
           <View style={styles.pad}>
@@ -143,7 +143,7 @@ export default function Login({navigation}) {
             <View style={styles.pad}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleLogin()}>
+                onPress={() => navigation.navigate('AppDrawerStackStaff')}>
                 <Text style={{color: COLORS.yellow}}>Login</Text>
               </TouchableOpacity>
             </View>
@@ -155,7 +155,7 @@ export default function Login({navigation}) {
               justifyContent: 'space-between',
             }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('Register')}
+              onPress={() => navigation.navigate('StaffRegister')}
               style={{paddingVertical: 25, paddingHorizontal: 10}}>
               <Text style={{color: COLORS.white, fontSize: 10}}>
                 REGISTER WITH US

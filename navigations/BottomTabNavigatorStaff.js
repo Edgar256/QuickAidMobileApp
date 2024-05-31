@@ -4,12 +4,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // CUSTOM IMPORTS
-import {
-  PatientHome,
-  PatientAccount,  
+import { 
   PatientBlogs,
-  PatientRequests,
-  PatientHistory,
+  StaffDispatchHistory,
+  StaffPatientAdmission,
+  StaffDashboard,
+  StaffAccount,
 } from '../screens';
 import {COLORS} from '../constants';
 
@@ -25,54 +25,54 @@ const Index = () => {
           showIcon: true,
         },
         tabBarStyle: {
-          backgroundColor: COLORS.red,
+          backgroundColor: COLORS.black,
         },
         tabBarInactiveTintColor: COLORS.white,
       })}>
       <Tab.Screen
-        name="History"
+        name="Dispatch History"
         options={{
           headerShown: false,
-          tabBarLabel: 'Medical History',
+          tabBarLabel: 'Dispatch History',
           tabBarIcon: ({color, size}) => (
             <Ionicons name="apps" color={color} size={size} />
           ),
-          headerTitle: 'Medical History',
+          headerTitle: 'Dispatch History',
         }}
-        component={PatientHistory}
+        component={StaffDispatchHistory}
       />
       <Tab.Screen
-        name="Requests"
+        name="StaffPatientAdmission"
         options={{
           headerShown: false,
-          tabBarLabel: 'Requests',
+          tabBarLabel: 'Admission',
           tabBarIcon: ({color, size}) => (
             <Icon name="plus-square" color={color} size={size} />
           ),
         }}
-        component={PatientRequests}
+        component={StaffPatientAdmission}
       />
       <Tab.Screen
-        name="PatientHome"
+        name="StaffDashboard"
         options={{
           headerShown: false,
-          tabBarLabel: 'Order Ambulance',
+          tabBarLabel: 'StaffDashboard',
           tabBarIcon: ({color, size}) => (
             <Icon name="ambulance" color={color} size={size} />
           ),
         }}
-        component={PatientHome}
+        component={StaffDashboard}
       />
       <Tab.Screen
-        name="My Account"
+        name="StaffAccount"
         options={{
           headerShown: false,
-          tabBarLabel: 'My Account',
+          tabBarLabel: 'StaffAccount',
           tabBarIcon: ({color, size}) => (
             <Icon name="user" color={color} size={size} />
           ),
         }}
-        component={PatientAccount}
+        component={StaffAccount}
       />
       <Tab.Screen
         name="Blogs"

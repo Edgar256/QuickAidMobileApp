@@ -42,22 +42,22 @@ export default function Start({navigation}) {
         <View style={styles.bodyText}>
           <Text style={styles.textBody}>Welcome to QuickAid</Text>
           <Text style={styles.textBody}>
-            Your trusted First Aid and Ambulance Services App!
-          </Text>
-          <Text style={styles.textBody}>
-            Access instant first aid guidance , emergeny ambulance services,
-            medical historystorage, and informative blogs.
-          </Text>
-          <Text style={styles.textBody}>
-            Download now for peace of mind during medical emergencies
-          </Text>
+            Please choose how you are logging in
+          </Text>          
         </View>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('LoginOptions')}>
-            <Text style={styles.text}>Get Started</Text>
+            onPress={() => navigation.navigate('PatientRegister')}>
+            <Text style={styles.text}>I am a Patient</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('StaffRegister')}>
+            <Text style={styles.text}>I am a Medical Personnel</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>

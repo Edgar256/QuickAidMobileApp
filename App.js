@@ -6,11 +6,18 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 // COMPONENT IMPORTS
 import AppDrawerStack from './navigations/AppDrawerStack';
+import AppDrawerStackStaff from './navigations/AppDrawerStackStaff';
+
 import {
   Start,
+  SplashScreen,
   HomeScreen,
+  LoginOptions,
   PatientLogin,
   PatientRegister,
+  PatientBlogs,
+  PatientBlog,
+  PatientOrderAmbulance,
   InboxDetails,
   BusinessProfile,
   BusinessProfileAnalytics,
@@ -23,10 +30,8 @@ import {
   NewsProfile,
   NewsProfileAnalytics,
   NewsProfileComments,
-  SplashScreen,
-  PatientBlogs,
-  PatientBlog,
-  PatientOrderAmbulance,
+  StaffLogin,
+  StaffRegister,
 } from './screens';
 
 const theme = {
@@ -44,6 +49,7 @@ export default function App() {
     <GestureHandlerRootView style={{flex: 1}}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName={'SplashScreen'}>
+          {/* Starter Pages */}
           <Stack.Screen
             name="SplashScreen"
             options={{
@@ -58,6 +64,15 @@ export default function App() {
             }}
             component={Start}
           />
+          <Stack.Screen
+            name="LoginOptions"
+            options={{
+              headerShown: false,
+            }}
+            component={LoginOptions}
+          />
+
+          {/* Patient Screens */}
           <Stack.Screen
             name="PatientLogin"
             options={{
@@ -94,8 +109,23 @@ export default function App() {
             component={PatientOrderAmbulance}
           />
 
+          {/* Staff Screens */}
+          <Stack.Screen
+            name="StaffLogin"
+            options={{
+              headerShown: false,
+            }}
+            component={StaffLogin}
+          />
+          <Stack.Screen
+            name="StaffRegister"
+            options={{
+              headerShown: false,
+            }}
+            component={StaffRegister}
+          />
 
-
+          {/* Other Screens */}
           <Stack.Screen
             name="HomeScreen"
             options={{
@@ -194,6 +224,13 @@ export default function App() {
               headerShown: false,
             }}
             component={AppDrawerStack}
+          />
+          <Stack.Screen
+            name="AppDrawerStackStaff"
+            options={{
+              headerShown: false,
+            }}
+            component={AppDrawerStackStaff}
           />
         </Stack.Navigator>
       </NavigationContainer>

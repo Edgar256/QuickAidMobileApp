@@ -9,11 +9,15 @@ import Animated from 'react-native-reanimated';
 
 // CUSTOM IMPORTS
 import BottomTabNavigator from './BottomTabNavigator';
+import BottomTabNavigatorStaff from './BottomTabNavigatorStaff';
+
 import {
   Settings,
   PatientInviteFriends,
   PatientLogout,
   PatientOrderAmbulance,
+  StaffSettings,
+  StaffLogout,
 } from '../screens';
 import {COLORS} from '../constants';
 import {
@@ -93,7 +97,7 @@ const Drawer = createDrawerNavigator();
 
 const HEADER_OPTIONS = {
   headerStyle: {
-    backgroundColor: COLORS.red,
+    backgroundColor: COLORS.black,
   },
   headerTintColor: COLORS.white,
   headerTitleAlign: 'center',
@@ -108,8 +112,8 @@ function AppDrawerStack() {
       screenOptions={{
         drawerStyle: {
           width: '80%',
-          backgroundColor: COLORS.red,
-          headerBackground: COLORS.red,
+          backgroundColor: COLORS.black,
+          headerBackground: COLORS.black,
           headerTintColor: COLORS.white,
         },
         drawerActiveTintColor: COLORS.yellow,
@@ -117,32 +121,13 @@ function AppDrawerStack() {
       }}>
       <Drawer.Screen
         name="Home"
-        component={BottomTabNavigator}
+        component={BottomTabNavigatorStaff}
         options={HEADER_OPTIONS}
       />
-      {/* <Drawer.Screen
-        name="Order Ambulance"
-        component={PatientOrderAmbulance}
-        options={HEADER_OPTIONS}
-      /> */}
-      {/*<Drawer.Screen
-        name="Medical History"
-        component={PatientHistory}
-        options={HEADER_OPTIONS}
-      />
+     
       <Drawer.Screen
-        name="My Past Requests"
-        component={PatientRequests}
-        options={HEADER_OPTIONS}
-      />     
-      <Drawer.Screen
-        name="Blogs"
-        component={PatientBlogs}
-        options={HEADER_OPTIONS}
-      /> */}
-      <Drawer.Screen
-        name="Settings"
-        component={Settings}
+        name="StaffSettings"
+        component={StaffSettings}
         options={HEADER_OPTIONS}
       />
       <Drawer.Screen
@@ -151,8 +136,8 @@ function AppDrawerStack() {
         options={HEADER_OPTIONS}
       />
       <Drawer.Screen
-        name="LogOut"
-        component={PatientLogout}
+        name="StaffLogout"
+        component={StaffLogout}
         options={HEADER_OPTIONS}
       />
     </Drawer.Navigator>
