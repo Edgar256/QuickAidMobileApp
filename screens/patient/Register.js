@@ -250,7 +250,7 @@ export default function Register({navigation}) {
                 onChangeText={text => setConfirmPassword(text)}
               />
               <Text style={{fontSize: SIZES.small, color: COLORS.white}}>
-                Never disclose your Ugalav password to anyone
+                Never disclose your Quickaid password to anyone
               </Text>
             </View>
 

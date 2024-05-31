@@ -643,7 +643,7 @@ export default function({navigation}) {
       amount: arr[0].amount * 100,
       currency: CURRENCY,
       source: CARD_TOKEN,
-      description: `UGALAV POST PAYMENT - ${billing.name} - ${description}`,
+      description: `QUICKAID POST PAYMENT - ${billing.name} - ${description}`,
     };
 
     return fetch('https://api.stripe.com/v1/charges', {

@@ -115,7 +115,7 @@ function InviteFriends({navigation}) {
       style={styles.container}>
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <View style={{padding: 40}}>
-          <Text>Invite Friends to the Ugalav Family</Text>
+          <Text>Invite Friends to the Quickaid Family</Text>
         </View>
 
         <TouchableOpacity

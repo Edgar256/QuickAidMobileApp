@@ -692,7 +692,7 @@ export default function JobProfileAnalytics({navigation}) {
                     paddingBottom: 40,
                   }}>
                   Post your item as a PREMIUM post to be able to view your
-                  Posts's Analytics and get the most out of the UGALAV APP
+                  Posts's Analytics and get the most out of the QUICKAID APP
                 </Text>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('CreateNewCommunityItem')}

@@ -33,7 +33,7 @@ function Logout({navigation}) {
   return (
     <View style={styles.container}>
       <View style={{padding: 40}}>
-        <Text>Proceed to Logout from Ugalav</Text>
+        <Text>Proceed to Logout from Quickaid</Text>
       </View>
       <TouchableOpacity
         onPress={() => logout()}

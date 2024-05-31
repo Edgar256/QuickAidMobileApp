@@ -126,7 +126,7 @@ function AppDrawerStack() {
         component={BottomTabNavigator}
         options={HEADER_OPTIONS}
       />
-      <Drawer.Screen
+      {/*<Drawer.Screen
         name="Medical History"
         component={PatientHistory}
         options={HEADER_OPTIONS}
@@ -145,7 +145,7 @@ function AppDrawerStack() {
         name="Blogs"
         component={PatientBlogs}
         options={HEADER_OPTIONS}
-      />
+      /> */}
       <Drawer.Screen
         name="Settings"
         component={Settings}
