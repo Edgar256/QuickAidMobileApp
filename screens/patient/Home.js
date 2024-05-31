@@ -13,9 +13,8 @@ import {
 
 // NPM MODULES
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import jwt_decode from 'jwt-decode';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // RESOURCE IMPORTS
 import {COLORS, SIZES} from '../../constants';
@@ -98,52 +97,12 @@ export default function Index({navigation}) {
         </View>
         <TouchableOpacity
           style={styles.section}
-          onPress={() => navigation.navigate('UserOrderAmbulance')}>
+          onPress={() => navigation.navigate('PatientOrderAmbulance')}>
           <View style={styles.iconContainer}>
-            <Icon name="ambulance" size={70} color={COLORS.primary} />
+            <Icon name="ambulance" size={80} color={COLORS.primary} />
           </View>
           <Text style={styles.sectionText}>Order an Ambulance</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => navigation.navigate('UserBlogs')}>
-          <View style={styles.iconContainer}>
-            <Icon name="feed" size={70} color={COLORS.primary} />
-          </View>
-          <Text style={styles.sectionText}>Read Blogs</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => navigation.navigate('UserBlogs')}>
-          <View style={styles.iconContainer}>
-            <Icon name="feed" size={70} color={COLORS.primary} />
-          </View>
-          <Text style={styles.sectionText}>Read Blogs</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => navigation.navigate('UserBlogs')}>
-          <View style={styles.iconContainer}>
-            <Icon name="feed" size={70} color={COLORS.primary} />
-          </View>
-          <Text style={styles.sectionText}>Read Blogs</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => navigation.navigate('UserBlogs')}>
-          <View style={styles.iconContainer}>
-            <Icon name="feed" size={70} color={COLORS.primary} />
-          </View>
-          <Text style={styles.sectionText}>Read Blogs</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.section}
-          onPress={() => navigation.navigate('UserBlogs')}>
-          <View style={styles.iconContainer}>
-            <Icon name="feed" size={70} color={COLORS.primary} />
-          </View>
-          <Text style={styles.sectionText}>Read Blogs</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>                
       </ScrollView>
     </SafeAreaView>
   );
@@ -153,8 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.lightGray,
-    padding: 10,
-    paddingBottom: 50,
+    padding: 5,
   },
   text: {
     fontSize: 18,
@@ -175,6 +133,7 @@ const styles = StyleSheet.create({
   sectionText: {
     fontSize: 16,
     textAlign: 'center',
+    paddingVertical:20
   },
   iconContainer: {
     alignItems: 'center',

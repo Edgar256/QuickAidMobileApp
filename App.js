@@ -24,6 +24,9 @@ import {
   NewsProfileAnalytics,
   NewsProfileComments,
   SplashScreen,
+  PatientBlogs,
+  PatientBlog,
+  PatientOrderAmbulance,
 } from './screens';
 
 const theme = {
@@ -70,9 +73,33 @@ export default function App() {
             component={PatientRegister}
           />
           <Stack.Screen
-            name="HomeScreen"
+            name="PatientBlogs"
             options={{
               headerShown: false,
+            }}
+            component={PatientBlogs}
+          />
+          <Stack.Screen
+            name="PatientBlog"
+            options={{
+              headerShown: true,
+            }}
+            component={PatientBlog}
+          />
+          <Stack.Screen
+            name="PatientOrderAmbulance"
+            options={{
+              headerShown: true,
+            }}
+            component={PatientOrderAmbulance}
+          />
+
+
+
+          <Stack.Screen
+            name="HomeScreen"
+            options={{
+              headerShown: true,
             }}
             component={HomeScreen}
           />

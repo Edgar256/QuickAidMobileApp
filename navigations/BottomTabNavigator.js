@@ -6,13 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 // CUSTOM IMPORTS
 import {
   PatientHome,
-  PatientAccount,
-
-  EventListing,
-  BusinessListing,
-  JobListing,
-  NewsFeed,
-  NewItem,
+  PatientAccount,  
   PatientBlogs,
   PatientRequests,
   PatientHistory,

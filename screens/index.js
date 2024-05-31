@@ -8,6 +8,7 @@ import PatientBlog from './patient/Blog'
 import PatientRequests from './patient/Requests'
 import PatientHistory from './patient/History'
 import PatientInviteFriends from './patient/InviteFriends'
+import PatientOrderAmbulance from './patient/OrderAmbulance'
 import PatientLogout from './patient/Logout'
 
 import HomeScreen from './HomeScreen';
@@ -51,6 +52,7 @@ export {
   PatientRequests,
   PatientHistory,
   PatientInviteFriends,
+  PatientOrderAmbulance,
   PatientLogout,
 
   HomeScreen,
