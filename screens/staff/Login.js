@@ -74,7 +74,7 @@ export default function Login({navigation}) {
             AsyncStorage.setItem('id', res.data.id);
             setSuccessMessage('Login Successful');
             setTimeout(() => {
-              return navigation.navigate('AppDrawerStack');
+              return navigation.navigate('AppDrawerStackStaff');
             }, 1500);
           } else if (res.data.status === 401) {
             setError('Wrong login Credentials');
@@ -143,7 +143,9 @@ export default function Login({navigation}) {
             <View style={styles.pad}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigation.navigate('AppDrawerStackStaff')}>
+                // onPress={() => navigation.navigate('AppDrawerStackStaff')}
+                onPress={()=> handleLogin()}
+                >
                 <Text style={{color: COLORS.yellow}}>Login</Text>
               </TouchableOpacity>
             </View>

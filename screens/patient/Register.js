@@ -36,31 +36,30 @@ import {apiURL} from '../../utils/apiURL';
 // Icons
 import ChevronDownIcon from '../../assets/svgs/chevron-down.svg';
 import ChevronDownIconDark from '../../assets/svgs/chevron-down-dark.svg';
+import AlertDanger from '../../components/AlertDanger';
+import AlertSuccess from '../../components/AlertSuccess';
 
 export default function Register({navigation}) {
   const [fullName, setFullName] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setlastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [countryCodeFull, setCountryCodeFull] = useState('');
   const [phone, setPhone] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [community, setCommunity] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [error, setError] = useState('');
   const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   let callingCode, countryCode;
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    
-  }, []);
+  useEffect(() => {}, []);
 
   async function handleRegister() {
     try {
+      setError('');
+      setSuccessMessage('');
+
       if (!fullName) {
         return alert('Full Names field cannot be blank');
       }
@@ -108,19 +107,13 @@ export default function Register({navigation}) {
         return alert('Phone field cannot be blank');
       }
 
-      const selectedCommunity = communitiesData.filter(
-        elem => elem.name === community,
-      );
+      const phoneNumber = '+' + callingCode + phone;
 
       const payload = {
-        firstName: firstName,
-        lastName: lastName,
+        name: fullName,
         email: email.toLowerCase(),
         password,
-        countryCode,
-        callingCode,
-        telephone: phone,
-        community: selectedCommunity[0].id,
+        phone: phoneNumber,
       };
 
       setIsLoading(true);
@@ -128,25 +121,25 @@ export default function Register({navigation}) {
       await axios
         .post(`${apiURL}/users/signup`, payload)
         .then(res => {
-          if (res.data.status === 200) {
-           
+          if (res.status === 201) {
             alert(
               'We are processing your details and creating your account.' +
                 'Your results are based off your details to give you the best experience using BIG DATA',
             );
             setSuccessMessage('Account has been created successfully');
             setTimeout(() => {
-              return navigation.navigate('UserLogin');
+              return navigation.navigate('PatientLogin');
             }, 2000);
           } else {
             setError('Failed to sign up. Please try again.');
             return setIsLoading(false);
-          }          
+          }
         })
-        .finally(()=>{
+        .finally(() => {
           setIsLoading(false);
-        })
+        });
     } catch (err) {
+      setError('Error creating account');
       return err;
     }
   }
@@ -254,14 +247,10 @@ export default function Register({navigation}) {
               </Text>
             </View>
 
-            <View style={styles.pad}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('PatientLogin')}>
-                <Text style={{color: COLORS.yellow}}>Register</Text>
-              </TouchableOpacity>
-            </View>
-            {/* {isLoading ? (
+            {error && <AlertDanger text={error} />}
+            {successMessage && <AlertSuccess text={successMessage} />}
+
+            {isLoading ? (
               <CustomLoaderSmall />
             ) : (
               <View style={styles.pad}>
@@ -271,7 +260,7 @@ export default function Register({navigation}) {
                   <Text style={{color: COLORS.yellow}}>Register</Text>
                 </TouchableOpacity>
               </View>
-            )} */}
+            )}
 
             <View
               style={{

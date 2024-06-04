@@ -23,14 +23,20 @@ export default function SplashScreen({navigation}) {
     (async () => {
       await AsyncStorage.getItem('token')
         .then(res => {
+          // console.log({res:jwt_decode(res)})
           if (!jwt_decode(res).id) {
             setTimeout(() => {
               navigation.navigate('Start');
             }, 3000);
           } else {
-            setTimeout(() => {
+            const role = jwt_decode(res).role;
+            if (role === 'USER') {
               navigation.navigate('AppDrawerStack');
-            }, 4000);
+            } else if (role === 'STAFF') {
+              navigation.navigate('AppDrawerStackStaff');
+            } else {
+              navigation.navigate('Start');
+            }
           }
         })
         .catch(err => {

@@ -13,7 +13,7 @@ export default function Index({navigation}) {
 
   const getBlogs = async () => {
     try {
-      const res = await axiosClient.get('/users/getAllBlogs');
+      const res = await axiosClient.get('/staff/getAllBlogs');
 
       if (res.status === 200) {
         setBlogs(res.data.message);
