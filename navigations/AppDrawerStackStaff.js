@@ -124,19 +124,19 @@ function AppDrawerStack() {
         component={BottomTabNavigatorStaff}
         options={HEADER_OPTIONS}
       />
-     
+{/*      
       <Drawer.Screen
         name="StaffSettings"
         component={StaffSettings}
         options={HEADER_OPTIONS}
-      />
+      /> */}
       <Drawer.Screen
         name="Invite Friends to QuickAid"
         component={PatientInviteFriends}
         options={HEADER_OPTIONS}
       />
       <Drawer.Screen
-        name="StaffLogout"
+        name="Logout"
         component={StaffLogout}
         options={HEADER_OPTIONS}
       />

@@ -33,7 +33,7 @@ const Index = () => {
         name="History"
         options={{
           headerShown: false,
-          tabBarLabel: 'Medical History',
+          tabBarLabel: 'Request History',
           tabBarIcon: ({color, size}) => (
             <Ionicons name="apps" color={color} size={size} />
           ),

@@ -1,56 +1,161 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { COLORS } from '../../constants';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Image,
+  RefreshControl,
+  ScrollView,
+} from 'react-native';
+import {COLORS} from '../../constants';
+import io from 'socket.io-client';
+import {apiHost, apiURL} from '../../utils/apiURL';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axiosClient from '../../utils/axiosClient';
+import moment from 'moment';
+import {limitStringLength} from '../../utils/helperFunctions';
+import Spinner from '../../components/Spinner';
 
 const Index = () => {
-  const [patientName, setPatientName] = useState('');
-  const [patientCondition, setPatientCondition] = useState('');
-  const [roomNumber, setRoomNumber] = useState('');
+  const [staff, setStaff] = useState({});
+  const [orders, setOrders] = useState([]);
+  const [socket, setSocket] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const handleAdmitPatient = () => {
-    // Implement patient admission logic here
-    console.log('Patient Name:', patientName);
-    console.log('Patient Condition:', patientCondition);
-    console.log('Room Number:', roomNumber);
-    // Assuming a successful admission, navigate to another screen
-    // navigation.navigate('AdmissionConfirmation');
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        axiosClient.get(`${apiURL}/staff/getStaff`).then(res => {
+          setStaff({...res.data.message});
+          return setIsLoading(false);
+        });
+      } catch (error) {}
+    };
+    getUser();
+
+    const getOrders = async () => {
+      try {
+        axiosClient
+          .get(`${apiURL}/staff/getAcceptedAmbulanceOrders`)
+          .then(res => {
+            setOrders([...res.data.message]);
+            return setIsLoading(false);
+          });
+      } catch (error) {}
+    };
+    getOrders();
+
+    const intervalId = setInterval(getOrders, 10000); // Fetch orders every 10 seconds
+
+    return () => clearInterval(intervalId); // Clear interval on component unmount
+  }, []);
+
+  const handleOpenRequest = data => {
+    try {
+      // AsyncStorage.setItem('currentBlogId', id);
+      return navigation.navigate('PatientBlog', data);
+    } catch (error) {}
   };
 
+  const completeOrder = async id => {
+    try {
+      axiosClient
+        .post(`${apiURL}/staff/completeAmbulanceOrder`, {id, staffId: staff.id})
+        .then(res => {
+          if (res.status === 200) {
+            alert('Request has been marked as COMPLETED');
+            axiosClient
+              .get(`${apiURL}/staff/getAcceptedAmbulanceOrders`)
+              .then(res => {
+                return setOrders([...res.data.message]);
+              });
+          }
+        });
+    } catch (error) {}
+  };
+
+  const renderItem = ({item}) => (
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => completeOrder(item.id)}>
+      <View style={styles.cardInner} onPress={() => acceptOrder(item.id)}>
+        <Image source={{uri: item?.profileImage}} style={styles.image} />
+        <View style={styles.details}>
+          <Text style={styles.text}>{item?.user?.name}</Text>
+          <Text style={styles.text}>{item?.user?.phone}</Text>
+          <Text style={styles.text}>{item?.user?.email}</Text>
+          <Text style={styles.text}>{item?.user?.location}</Text>
+          <View style={styles.line} />
+        </View>
+      </View>
+      <Text style={styles.text}>{item?.healthCondition}</Text>
+      <Text style={styles.text}>{item?.notes}</Text>
+      <Text style={styles.text}>Status: {item.status}</Text>
+      <Text style={styles.text}>
+        Date Requested: {moment(item?.createdAt).format('LLLL')}
+      </Text>
+      <View style={styles.button}>
+        <Text style={styles.buttonText}>Confirm & Complete Admission</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const onRefresh = React.useCallback(async () => {
+    try {
+      setRefreshing(true);
+      axiosClient.get(`${apiURL}/staff/getStaff`).then(res => {
+        setStaff({...res.data.message});
+        return setIsLoading(false);
+      });
+      axiosClient
+        .get(`${apiURL}/staff/getAcceptedAmbulanceOrders`)
+        .then(res => {
+          setOrders([...res.data.message]);
+          return setIsLoading(false);
+        });
+      setRefreshing(false);
+    } catch (error) {}
+  });
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Admit Patient</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Patient Name"
-        value={patientName}
-        onChangeText={setPatientName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Patient Condition"
-        value={patientCondition}
-        onChangeText={setPatientCondition}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Room Number"
-        value={roomNumber}
-        onChangeText={setRoomNumber}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleAdmitPatient}>
-        <Text style={styles.buttonText}>Admit Patient</Text>
-      </TouchableOpacity>
-    </View>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      <Text style={styles.title}> Patient Requests In-Progress</Text>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {orders.length === 0 ? (
+            <View>
+              <Text style={styles.text}>No Accepted Request found</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={orders}
+              renderItem={renderItem}
+              keyExtractor={item => item.id.toString()}
+              contentContainerStyle={styles.listContainer}
+            />
+          )}
+        </>
+      )}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: COLORS.lightGray,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    backgroundColor: '#F2F5FB',
   },
   title: {
     fontSize: 24,
@@ -67,15 +172,73 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.success,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    textAlign: 'center',
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
+    flex: 1,
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  itemContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    elevation: 2,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  content: {
+    fontSize: 16,
+  },
+
+  // Card styling
+  card: {
+    backgroundColor: '#fff',
+    padding: 10,
+    margin: 5,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  cardInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  image: {
+    width: 60,
+    height: 60,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  details: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  line: {
+    height: 1,
+    backgroundColor: '#f5f5f5',
+    marginVertical: 10,
+  },
+  text: {
+    fontSize: 14,
+    color: '#666',
   },
 });
 

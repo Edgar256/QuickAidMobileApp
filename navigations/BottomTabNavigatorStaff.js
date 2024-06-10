@@ -18,7 +18,7 @@ const Tab = createBottomTabNavigator();
 const Index = () => {
   return (
     <Tab.Navigator
-      initialRouteName="PatientHome"
+      initialRouteName="StaffDashboard"
       screenOptions={() => ({
         tabBarActiveTintColor: COLORS.yellow,
         tabBarOptions: {
@@ -45,7 +45,7 @@ const Index = () => {
         name="StaffPatientAdmission"
         options={{
           headerShown: false,
-          tabBarLabel: 'Admission',
+          tabBarLabel: 'Accepted',
           tabBarIcon: ({color, size}) => (
             <Icon name="plus-square" color={color} size={size} />
           ),
@@ -56,7 +56,7 @@ const Index = () => {
         name="StaffDashboard"
         options={{
           headerShown: false,
-          tabBarLabel: 'StaffDashboard',
+          tabBarLabel: 'Requests',
           tabBarIcon: ({color, size}) => (
             <Icon name="ambulance" color={color} size={size} />
           ),

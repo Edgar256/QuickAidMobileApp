@@ -122,10 +122,7 @@ export default function Register({navigation}) {
         .post(`${apiURL}/users/signup`, payload)
         .then(res => {
           if (res.status === 201) {
-            alert(
-              'We are processing your details and creating your account.' +
-                'Your results are based off your details to give you the best experience using BIG DATA',
-            );
+            alert('Account has been created successfully');
             setSuccessMessage('Account has been created successfully');
             setTimeout(() => {
               return navigation.navigate('PatientLogin');

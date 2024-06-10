@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import Spinner from '../../components/Spinner';
 import axiosClient from '../../utils/axiosClient';
 import moment from 'moment';
@@ -12,7 +19,7 @@ const Index = () => {
 
   const getAmbulanceOrders = async () => {
     try {
-      const res = await axiosClient.get('/users/getAmbulanceOrders');
+      const res = await axiosClient.get('/users/getCompletedAmbulanceOrders');
 
       if (res.status === 200) {
         setIsLoading(false);
@@ -31,15 +38,34 @@ const Index = () => {
 
   // Render item function for FlatList
   const renderAmbulanceRequest = ({item}) => (
-    <View style={styles.requestContainer}>
-      <Text style={styles.locationText}>Location: {item.location}</Text>
-      <Text style={styles.locationText}>
-        Health Condition: {item.healthCondition}
+    <View style={styles.card} >
+      <View style={styles.cardInner} >
+        <Image source={{uri: item?.profileImage}} style={styles.image} />
+        {/* <Image
+        source={{
+          uri: item?.profileImage
+            ? item.profileImage
+            : "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-user-2281862025",
+        }}
+        style={styles.image}
+      /> */}
+        <View style={styles.details}>
+          <Text style={styles.text}>{item?.staff?.name}</Text>
+          <Text style={styles.text}>{item?.staff?.phone}</Text>
+          <Text style={styles.text}>{item?.staff?.email}</Text>
+          <View style={styles.line} />
+        </View>
+      </View>
+      <Text style={styles.text}>{item?.healthCondition}</Text>
+      <Text style={styles.text}>{item?.notes}</Text>
+      <Text style={styles.text}>Status: {item.status}</Text>
+      <Text style={styles.text}>Location: {item.location}</Text>
+      <Text style={styles.text}>
+        Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
-      <Text style={styles.locationText}>Notes: {item.notes}</Text>
-      <Text style={styles.timeText}>
-        Date Requested: {moment(item.createdAt).format('LLLL')}
-      </Text>
+      <View style={styles.button}>
+        <Text style={styles.buttonText}>Cancel & Delete Request</Text>
+      </View>
     </View>
   );
 
@@ -49,13 +75,12 @@ const Index = () => {
       {isLoading ? (
         <Spinner />
       ) : (
-        // <FlatList
-        //   data={ambulanceRequests}
-        //   renderItem={renderAmbulanceRequest}
-        //   keyExtractor={item => item.id}
-        //   contentContainerStyle={styles.listContainer}
-        // />
-        <Text>Patient medical history</Text>
+        <FlatList
+          data={ambulanceRequests}
+          renderItem={renderAmbulanceRequest}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.listContainer}
+        />
       )}
     </View>
   );
@@ -92,6 +117,43 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 14,
     fontWeight: 'bold',
+  },
+
+  // Card styling
+  card: {
+    backgroundColor: '#fff',
+    padding: 10,
+    margin: 5,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  cardInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  image: {
+    width: 60,
+    height: 60,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  details: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  line: {
+    height: 1,
+    backgroundColor: '#f5f5f5',
+    marginVertical: 10,
+  },
+  text: {
+    fontSize: 14,
+    color: '#666',
   },
 });
 

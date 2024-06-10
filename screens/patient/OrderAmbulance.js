@@ -77,7 +77,7 @@ const OrderAmbulance = ({navigation}) => {
       setNotes('');
       setLocation('');
       setTimeout(() => {
-        return navigation.navigate('TabNavigator');
+        return navigation.navigate('BottomTabNavigator');
       }, 2000);
     } else {
       setIsLoading(false);

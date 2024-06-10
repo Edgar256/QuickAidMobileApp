@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     marginVertical: 8,
   },
   backgroundImage: {
@@ -124,16 +124,16 @@ const styles = StyleSheet.create({
   },
   section: {
     backgroundColor: COLORS.white,
-    padding: 20,
+    padding: 10,
     margin: 0,
-    borderRadius: 10,
+    borderRadius: 7,
     marginVertical: 8,
     elevation: 5,
   },
   sectionText: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
-    paddingVertical:20
+    paddingVertical:8
   },
   iconContainer: {
     alignItems: 'center',

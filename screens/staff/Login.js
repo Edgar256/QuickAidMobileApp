@@ -68,7 +68,13 @@ export default function Login({navigation}) {
       axios
         .post(`${apiURL}/staff/signin`, payload)
         .then(res => {
-          if (res.data.status === 200) {
+          console.log(res)
+          if(res.status === 404){
+            setError(res.data.error)
+            setIsLoading(false)
+            return 
+          }
+          if (res.status === 200) {
             setIsLoading(false);
             AsyncStorage.setItem('token', res.data.token);
             AsyncStorage.setItem('id', res.data.id);

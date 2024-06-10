@@ -1,73 +1,119 @@
-import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+  ScrollView,
+} from 'react-native';
+import axiosClient from '../../utils/axiosClient';
+import moment from 'moment';
+import Spinner from '../../components/Spinner';
 import {COLORS} from '../../constants';
 
 const Index = ({navigation}) => {
-  const handleEditProfile = () => {
-    // Navigate to the Edit Profile screen
-    navigation.navigate('EditProfile');
+  const [user, setUser] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getUser = async () => {
+    try {
+      const res = await axiosClient.get('/staff/getStaff');
+
+      if (res.status === 200) {
+        setUser(res.data.message);
+        return setIsLoading(false);
+      } else {
+        console.log('User is not authenticated');
+        return navigation.navigate('Welcome');
+      }
+    } catch (error) {}
   };
 
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const onRefresh = React.useCallback(async () => {
+    try {
+      setRefreshing(true);
+      axiosClient.get(`${apiURL}/staff/getStaff`).then(res => {
+        setUser({...res.data.message});
+        return setIsLoading(false);
+      });
+      setRefreshing(false);
+    } catch (error) {}
+  });
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>My Profile</Text>
-      <View style={styles.profileInfo}>
-        <Text style={styles.label}>Name:</Text>
-        <Text style={styles.value}>John Doe</Text>
-      </View>
-      <View style={styles.profileInfo}>
-        <Text style={styles.label}>Email:</Text>
-        <Text style={styles.value}>johndoe@example.com</Text>
-      </View>
-      <View style={styles.profileInfo}>
-        <Text style={styles.label}>Phone Number:</Text>
-        <Text style={styles.value}>+1 123-456-7890</Text>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleEditProfile}>
-        <Text style={styles.buttonText}>Edit Profile</Text>
-      </TouchableOpacity>
-    </View>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      <Text style={styles.header}>Staff Personal Details</Text>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <View>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.label}>Name: {user.name}</Text>
+          </View>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.value}>Email :{user.email}</Text>
+          </View>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.value}>Phone :{user.phone}</Text>
+          </View>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.value}>
+              Date Registered :{moment(user.createdAt).format('LLLL')}
+            </Text>
+          </View>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Update Details</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: COLORS.lightGray,
+    backgroundColor: '#FFFFFF',
+    padding: 20,
   },
-  title: {
-    fontSize: 24,
+  header: {
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  profileInfo: {
+  detailsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
     marginBottom: 10,
   },
   label: {
-    fontSize: 18,
+    flex: 1,
     fontWeight: 'bold',
   },
   value: {
-    fontSize: 18,
+    flex: 2,
   },
   button: {
     backgroundColor: COLORS.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    marginTop: 20,
   },
   buttonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
