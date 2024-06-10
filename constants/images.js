@@ -58,5 +58,4 @@ export default {
   Camera,
   DefaultImage,
   DefaultUserImage,
-  Edit
 };

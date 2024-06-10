@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState} from 'react';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -9,12 +9,7 @@ import Animated from 'react-native-reanimated';
 
 // CUSTOM IMPORTS
 import BottomTabNavigator from './BottomTabNavigator';
-import {
-  Settings,
-  PatientInviteFriends,
-  PatientLogout,
-  PatientOrderAmbulance,
-} from '../screens';
+import {PatientInviteFriends} from '../screens';
 import {COLORS} from '../constants';
 import {
   View,
@@ -24,20 +19,48 @@ import {
   Linking,
   Share,
 } from 'react-native';
+import {CustomLoaderSmall} from '../components';
+import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function CustomDrawerContent(props) {
+  const [isLoading, setIsLoading] = useState(false);
   const progress = useDrawerProgress();
+  const navigation = useNavigation();
 
   const translateX = Animated.interpolateNode(progress, {
     inputRange: [0, 1],
     outputRange: [-100, 0],
   });
 
+  async function handleLogout() {
+    setIsLoading(true);
+    try {
+      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('id');
+      setIsLoading(false);
+      return navigation.navigate('Start');
+    } catch (error) {
+      return alert('FAILED TO LOGOUT');
+    }
+  }
+
   return (
     <DrawerContentScrollView {...props}>
       <Animated.View style={{transform: [{translateX}]}}>
         <DrawerItemList {...props} />
-        {/* <DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
+        <View>
+          {isLoading ? (
+            <CustomLoaderSmall />
+          ) : (
+            <TouchableOpacity
+              style={styles.navItemLogout}
+              onPress={handleLogout}>
+              <Text style={styles.navText}>Logout</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
         <View style={styles.navItem}>
           <View style={{paddingTop: 100, padding: 10}}>
             <Text
@@ -120,41 +143,16 @@ function AppDrawerStack() {
         component={BottomTabNavigator}
         options={HEADER_OPTIONS}
       />
-      {/* <Drawer.Screen
-        name="Order Ambulance"
-        component={PatientOrderAmbulance}
-        options={HEADER_OPTIONS}
-      /> */}
-      {/*<Drawer.Screen
-        name="Medical History"
-        component={PatientHistory}
-        options={HEADER_OPTIONS}
-      />
-      <Drawer.Screen
-        name="My Past Requests"
-        component={PatientRequests}
-        options={HEADER_OPTIONS}
-      />     
-      <Drawer.Screen
-        name="Blogs"
-        component={PatientBlogs}
-        options={HEADER_OPTIONS}
-      /> */}
-      <Drawer.Screen
-        name="Settings"
-        component={Settings}
-        options={HEADER_OPTIONS}
-      />
       <Drawer.Screen
         name="Invite Friends to QuickAid"
         component={PatientInviteFriends}
         options={HEADER_OPTIONS}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="LogOut"
         component={PatientLogout}
         options={HEADER_OPTIONS}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 }
@@ -191,6 +189,10 @@ const styles = StyleSheet.create({
   },
   navItem: {
     paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  navItemLogout: {
+    paddingLeft: 20,
     paddingVertical: 4,
   },
   navItemContent: {

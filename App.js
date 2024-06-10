@@ -11,25 +11,12 @@ import AppDrawerStackStaff from './navigations/AppDrawerStackStaff';
 import {
   Start,
   SplashScreen,
-  HomeScreen,
   LoginOptions,
   PatientLogin,
   PatientRegister,
   PatientBlogs,
   PatientBlog,
-  PatientOrderAmbulance,
-  InboxDetails,
-  BusinessProfile,
-  BusinessProfileAnalytics,
-  BusinessProfileReviews,
-  EventProfile,
-  EventProfileReviews,
-  EventProfileAnalytics,
-  JobProfile,
-  JobProfileAnalytics,
-  NewsProfile,
-  NewsProfileAnalytics,
-  NewsProfileComments,
+  PatientOrderAmbulance,  
   StaffLogin,
   StaffRegister,
 } from './screens';
@@ -125,99 +112,7 @@ export default function App() {
             component={StaffRegister}
           />
 
-          {/* Other Screens */}
-          <Stack.Screen
-            name="HomeScreen"
-            options={{
-              headerShown: true,
-            }}
-            component={HomeScreen}
-          />
-          <Stack.Screen
-            name="InboxDetails"
-            options={{
-              headerShown: false,
-            }}
-            component={InboxDetails}
-          />
-          <Stack.Screen
-            name="BusinessProfile"
-            options={{
-              headerShown: false,
-            }}
-            component={BusinessProfile}
-          />
-          <Stack.Screen
-            name="BusinessProfileReviews"
-            options={{
-              headerShown: false,
-            }}
-            component={BusinessProfileReviews}
-          />
-          <Stack.Screen
-            name="BusinessProfileAnalytics"
-            options={{
-              headerShown: false,
-            }}
-            component={BusinessProfileAnalytics}
-          />
-          <Stack.Screen
-            name="EventProfile"
-            options={{
-              headerShown: false,
-            }}
-            component={EventProfile}
-          />
-          <Stack.Screen
-            name="EventProfileAnalytics"
-            options={{
-              headerShown: false,
-            }}
-            component={EventProfileAnalytics}
-          />
-          <Stack.Screen
-            name="EventProfileReviews"
-            options={{
-              headerShown: false,
-            }}
-            component={EventProfileReviews}
-          />
-          <Stack.Screen
-            name="JobProfile"
-            options={{
-              headerShown: false,
-            }}
-            component={JobProfile}
-          />
-          <Stack.Screen
-            name="JobProfileAnalytics"
-            options={{
-              headerShown: false,
-            }}
-            component={JobProfileAnalytics}
-          />
-          <Stack.Screen
-            name="NewsProfile"
-            options={{
-              headerShown: false,
-            }}
-            component={NewsProfile}
-          />
-          <Stack.Screen
-            name="NewsProfileAnalytics"
-            options={{
-              headerShown: false,
-            }}
-            component={NewsProfileAnalytics}
-          />
-          <Stack.Screen
-            name="NewsProfileComments"
-            options={{
-              headerShown: false,
-            }}
-            component={NewsProfileComments}
-          />
-
+          {/* Other Screens */} 
           <Stack.Screen
             name="AppDrawerStack"
             options={{
