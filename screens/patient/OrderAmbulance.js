@@ -8,13 +8,10 @@ import {
   ScrollView,
 } from 'react-native';
 import {COLORS} from '../../constants';
-import Icon from 'react-native-vector-icons/FontAwesome';
-// import MapView, {Marker} from 'react-native-maps';
 import axiosClient from '../../utils/axiosClient';
 import AlertDanger from '../../components/AlertDanger';
 import AlertSuccess from '../../components/AlertSuccess';
 import Spinner from '../../components/Spinner';
-// import {ScrollView} from 'react-native-gesture-handler';
 
 const OrderAmbulance = ({navigation}) => {
   const [location, setLocation] = useState('');
@@ -78,7 +75,7 @@ const OrderAmbulance = ({navigation}) => {
       setNotes('');
       setLocation('');
       setTimeout(() => {
-        return navigation.navigate('BottomTabNavigator');
+        return navigation.navigate('AppDrawerStack');
       }, 2000);
     } else {
       setIsLoading(false);
@@ -89,26 +86,6 @@ const OrderAmbulance = ({navigation}) => {
 
   return (
     <ScrollView style={styles.container}>
-      
-      {/* <View style={styles.section}>
-         <Text style={styles.sectionText}>
-          Select location from Google Maps:
-        </Text> 
-      <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: 0.3152,
-            longitude: 32.5819,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-          onPress={handleMapPress}>
-          {selectedLocation && ( // Render marker if location is selected
-            <Marker coordinate={selectedLocation} />
-          )}
-        </MapView>    
-      </View> */}
-
       <View style={styles.section}>
         <Text style={styles.sectionText}>Location:</Text>
         <TextInput
@@ -198,7 +175,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   map: {
-    // ...StyleSheet.absoluteFillObject,
     height: 250,
   },
 });

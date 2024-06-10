@@ -24,6 +24,7 @@ const Index = () => {
   const [orders, setOrders] = useState([]);
   const [socket, setSocket] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -52,9 +53,10 @@ const Index = () => {
     const intervalId = setInterval(getOrders, 10000); // Fetch orders every 10 seconds
 
     return () => clearInterval(intervalId); // Clear interval on component unmount
-  }, []); 
+  }, []);
 
   const completeOrder = async id => {
+    setIsProcessing(true);
     try {
       axiosClient
         .post(`${apiURL}/staff/completeAmbulanceOrder`, {id, staffId: staff.id})
@@ -64,14 +66,18 @@ const Index = () => {
             axiosClient
               .get(`${apiURL}/staff/getAcceptedAmbulanceOrders`)
               .then(res => {
+                setIsProcessing(false);
                 return setOrders([...res.data.message]);
               });
           }
         });
-    } catch (error) {}
+    } catch (error) {
+      return setIsProcessing(false);
+    }
   };
 
   const cancelOrder = async id => {
+    setIsProcessing(true);
     try {
       axiosClient
         .post(`${apiURL}/staff/cancelAmbulanceOrder`, {id})
@@ -81,11 +87,14 @@ const Index = () => {
             axiosClient
               .get(`${apiURL}/staff/getAcceptedAmbulanceOrders`)
               .then(res => {
+                setIsProcessing(false);
                 return setOrders([...res.data.message]);
               });
           }
         });
-    } catch (error) {}
+    } catch (error) {
+      return setIsProcessing(false);
+    }
   };
 
   const renderItem = ({item}) => (
@@ -109,16 +118,22 @@ const Index = () => {
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
-      <TouchableOpacity
-        onPress={() => completeOrder(item.id)}
-        style={styles.button}>
-        <Text style={styles.buttonText}>Confirm & Complete Admission</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => cancelOrder(item.id)}
-        style={styles.buttonCancel}>
-        <Text style={styles.buttonTextCancel}>Confirm & Complete Admission</Text>
-      </TouchableOpacity>
+      {isProcessing ? (
+        <Spinner />
+      ) : (
+        <>
+          <TouchableOpacity
+            onPress={() => completeOrder(item.id)}
+            style={styles.button}>
+            <Text style={styles.buttonText}>Confirm & Complete Request</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => cancelOrder(item.id)}
+            style={styles.buttonCancel}>
+            <Text style={styles.buttonTextCancel}>Cancel Request</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 

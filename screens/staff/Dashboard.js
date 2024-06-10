@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   FlatList,
@@ -16,7 +15,6 @@ import {apiHost, apiURL} from '../../utils/apiURL';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axiosClient from '../../utils/axiosClient';
 import moment from 'moment';
-import {limitStringLength} from '../../utils/helperFunctions';
 import Spinner from '../../components/Spinner';
 
 const Index = () => {
@@ -24,11 +22,8 @@ const Index = () => {
   const [orders, setOrders] = useState([]);
   const [socket, setSocket] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
-  const defaultImage = require('../../assets/images/default-user-image.jpg');
-
-  // console.log({defaultImage})
 
   useEffect(() => {
     const handleWebSocketConnection = async () => {
@@ -105,22 +100,26 @@ const Index = () => {
 
   const acceptOrder = async id => {
     try {
+      setIsProcessing(true);
       axiosClient
         .post(`${apiURL}/staff/acceptAmbulanceOrder`, {id, staffId: staff.id})
         .then(res => {
           if (res.status === 200) {
             axiosClient.get(`${apiURL}/staff/getAmbulanceOrders`).then(res => {
               setOrders([...res.data.message]);
+              setIsProcessing(false);
               return setIsLoading(false);
             });
           }
         });
-    } catch (error) {}
+    } catch (error) {
+      return setIsProcessing(false);
+    }
   };
 
   const renderItem = ({item}) => (
-    <TouchableOpacity style={styles.card} onPress={() => acceptOrder(item.id)}>
-      <View style={styles.cardInner} onPress={() => acceptOrder(item.id)}>
+    <View style={styles.card}>
+      <View style={styles.cardInner}>
         <Image
           source={require('../../assets/images/default-user-image.jpg')}
           style={styles.image}
@@ -139,10 +138,16 @@ const Index = () => {
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>Admit Patient</Text>
-      </View>
-    </TouchableOpacity>
+      {isProcessing ? (
+        <Spinner />
+      ) : (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => acceptOrder(item.id)}>
+          <Text style={styles.buttonText}>Admit Patient</Text>
+        </TouchableOpacity>
+      )}
+    </View>
   );
 
   const onRefresh = React.useCallback(async () => {
