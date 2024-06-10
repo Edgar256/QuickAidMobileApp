@@ -155,19 +155,19 @@ export default function Login({navigation}) {
               justifyContent: 'space-between',
             }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('Register')}
+              onPress={() => navigation.navigate('PatientRegister')}
               style={{paddingVertical: 25, paddingHorizontal: 10}}>
               <Text style={{color: COLORS.white, fontSize: 10}}>
                 REGISTER WITH US
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => navigation.navigate('ForgotPassword')}
               style={{paddingVertical: 25, paddingHorizontal: 10}}>
               <Text style={{color: COLORS.white, fontSize: 10}}>
                 FORGOT PASSWORD
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </ImageBackground>

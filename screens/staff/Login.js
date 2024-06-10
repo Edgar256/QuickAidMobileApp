@@ -169,13 +169,13 @@ export default function Login({navigation}) {
                 REGISTER WITH US
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => navigation.navigate('ForgotPassword')}
               style={{paddingVertical: 25, paddingHorizontal: 10}}>
               <Text style={{color: COLORS.white, fontSize: 10}}>
                 FORGOT PASSWORD
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </ImageBackground>

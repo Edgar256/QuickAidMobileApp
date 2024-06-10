@@ -160,9 +160,10 @@ export default function Register({navigation}) {
               <Text
                 style={{
                   color: COLORS.black,
-                  fontWeight: '700',
+                  fontWeight: '300',
                   textAlign: 'center',
                   fontSize: 16,
+                  color:COLORS.white
                 }}>
                 Patient Registration
               </Text>
