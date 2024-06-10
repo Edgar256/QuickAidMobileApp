@@ -34,17 +34,17 @@ const Index = ({navigation}) => {
       ) : (
         <View>
           <View style={styles.detailsContainer}>
-            <Text style={styles.label}>Name: {user.name}</Text>
+            <Text style={styles.value}>Name: {user.name}</Text>
           </View>
           <View style={styles.detailsContainer}>
-            <Text style={styles.value}>Email :{user.email}</Text>
+            <Text style={styles.value}>Email: {user.email}</Text>
           </View>
           <View style={styles.detailsContainer}>
-            <Text style={styles.value}>Phone :{user.phone}</Text>
+            <Text style={styles.value}>Phone: {user.phone}</Text>
           </View>
           <View style={styles.detailsContainer}>
             <Text style={styles.value}>
-              Date Registered :{moment(user.createdAt).format('LLLL')}
+              Date Registered: {moment(user.createdAt).format('LLLL')}
             </Text>
           </View>
         </View>

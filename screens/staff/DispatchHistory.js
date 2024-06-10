@@ -89,12 +89,15 @@ const Index = () => {
   const renderItem = ({item}) => (
     <TouchableOpacity style={styles.card}>
       <View style={styles.cardInner} onPress={() => acceptOrder(item.id)}>
-        <Image source={{uri: item?.profileImage}} style={styles.image} />
+        <Image
+          source={require('../../assets/images/default-user-image.jpg')}
+          style={styles.image}
+        />
         <View style={styles.details}>
           <Text style={styles.text}>{item?.user?.name}</Text>
           <Text style={styles.text}>{item?.user?.phone}</Text>
           <Text style={styles.text}>{item?.user?.email}</Text>
-          <Text style={styles.text}>{item?.user?.location}</Text>
+          <Text style={styles.text}>{item?.location}</Text>
           <View style={styles.line} />
         </View>
       </View>
@@ -208,9 +211,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   image: {
-    width: 60,
-    height: 60,
-    borderRadius: 25,
+    width: 80,
+    height: 80,
+    borderRadius: 75,
     marginRight: 10,
   },
   details: {

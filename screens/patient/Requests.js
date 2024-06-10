@@ -52,7 +52,6 @@ const Index = () => {
         setError('Error requesting for Ambulance');
         return setRefreshing(false);
       }
-      
     } catch (error) {}
   });
 
@@ -60,32 +59,24 @@ const Index = () => {
   const renderAmbulanceRequest = ({item}) => (
     <View style={styles.card}>
       <View style={styles.cardInner}>
-        <Image source={{uri: item?.profileImage}} style={styles.image} />
-        {/* <Image
-        source={{
-          uri: item?.profileImage
-            ? item.profileImage
-            : "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-user-2281862025",
-        }}
-        style={styles.image}
-      /> */}
+        <Image
+          source={require('../../assets/images/default-user-image.jpg')}
+          style={styles.image}
+        />
         <View style={styles.details}>
           <Text style={styles.text}>{item?.staff?.name}</Text>
           <Text style={styles.text}>{item?.staff?.phone}</Text>
           <Text style={styles.text}>{item?.staff?.email}</Text>
+          <Text style={styles.text}> {item.location}</Text>
           <View style={styles.line} />
         </View>
       </View>
       <Text style={styles.text}>{item?.healthCondition}</Text>
       <Text style={styles.text}>{item?.notes}</Text>
       <Text style={styles.text}>Status: {item.status}</Text>
-      <Text style={styles.text}>Location: {item.location}</Text>
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
-      </Text>
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>Cancel & Delete Request</Text>
-      </View>
+      </Text>      
     </View>
   );
 
@@ -177,9 +168,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   image: {
-    width: 60,
-    height: 60,
-    borderRadius: 25,
+    width: 80,
+    height: 80,
+    borderRadius: 75,
     marginRight: 10,
   },
   details: {

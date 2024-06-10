@@ -26,7 +26,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
-  const defaultImage = require('../../assets/images/default-user-image.jpg')
+  const defaultImage = require('../../assets/images/default-user-image.jpg');
 
   // console.log({defaultImage})
 
@@ -121,20 +121,15 @@ const Index = () => {
   const renderItem = ({item}) => (
     <TouchableOpacity style={styles.card} onPress={() => acceptOrder(item.id)}>
       <View style={styles.cardInner} onPress={() => acceptOrder(item.id)}>
-        <Image source={{uri: item?.profileImage}} style={styles.image} />
-        {/* <Image
-          source={{
-            uri: item?.profileImage
-              ? item.profileImage
-              : "https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-user-2281862025",
-          }}
+        <Image
+          source={require('../../assets/images/default-user-image.jpg')}
           style={styles.image}
-        /> */}
+        />
         <View style={styles.details}>
           <Text style={styles.text}>{item?.user?.name}</Text>
           <Text style={styles.text}>{item?.user?.phone}</Text>
           <Text style={styles.text}>{item?.user?.email}</Text>
-          <Text style={styles.text}>{item?.user?.location}</Text>
+          <Text style={styles.text}>{item?.location}</Text>
           <View style={styles.line} />
         </View>
       </View>
@@ -279,9 +274,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   image: {
-    width: 60,
-    height: 60,
-    borderRadius: 25,
+    width: 80,
+    height: 80,
+    borderRadius: 75,
     marginRight: 10,
   },
   details: {

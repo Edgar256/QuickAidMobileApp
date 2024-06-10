@@ -52,14 +52,7 @@ const Index = () => {
     const intervalId = setInterval(getOrders, 10000); // Fetch orders every 10 seconds
 
     return () => clearInterval(intervalId); // Clear interval on component unmount
-  }, []);
-
-  const handleOpenRequest = data => {
-    try {
-      // AsyncStorage.setItem('currentBlogId', id);
-      return navigation.navigate('PatientBlog', data);
-    } catch (error) {}
-  };
+  }, []); 
 
   const completeOrder = async id => {
     try {
@@ -78,17 +71,35 @@ const Index = () => {
     } catch (error) {}
   };
 
+  const cancelOrder = async id => {
+    try {
+      axiosClient
+        .post(`${apiURL}/staff/cancelAmbulanceOrder`, {id})
+        .then(res => {
+          if (res.status === 200) {
+            alert('Request has cancelled');
+            axiosClient
+              .get(`${apiURL}/staff/getAcceptedAmbulanceOrders`)
+              .then(res => {
+                return setOrders([...res.data.message]);
+              });
+          }
+        });
+    } catch (error) {}
+  };
+
   const renderItem = ({item}) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => completeOrder(item.id)}>
-      <View style={styles.cardInner} onPress={() => acceptOrder(item.id)}>
-        <Image source={{uri: item?.profileImage}} style={styles.image} />
+    <View style={styles.card}>
+      <View style={styles.cardInner}>
+        <Image
+          source={require('../../assets/images/default-user-image.jpg')}
+          style={styles.image}
+        />
         <View style={styles.details}>
           <Text style={styles.text}>{item?.user?.name}</Text>
           <Text style={styles.text}>{item?.user?.phone}</Text>
           <Text style={styles.text}>{item?.user?.email}</Text>
-          <Text style={styles.text}>{item?.user?.location}</Text>
+          <Text style={styles.text}>{item?.location}</Text>
           <View style={styles.line} />
         </View>
       </View>
@@ -98,10 +109,17 @@ const Index = () => {
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
-      <View style={styles.button}>
+      <TouchableOpacity
+        onPress={() => completeOrder(item.id)}
+        style={styles.button}>
         <Text style={styles.buttonText}>Confirm & Complete Admission</Text>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => cancelOrder(item.id)}
+        style={styles.buttonCancel}>
+        <Text style={styles.buttonTextCancel}>Confirm & Complete Admission</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   const onRefresh = React.useCallback(async () => {
@@ -185,6 +203,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     flex: 1,
   },
+  buttonCancel: {
+    backgroundColor: COLORS.white,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  buttonTextCancel: {
+    color: 'black',
+    fontSize: 16,
+    textAlign: 'center',
+    flex: 1,
+  },
   listContainer: {
     paddingBottom: 20,
   },
@@ -222,9 +254,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   image: {
-    width: 60,
-    height: 60,
-    borderRadius: 25,
+    width: 80,
+    height: 80,
+    borderRadius: 75,
     marginRight: 10,
   },
   details: {

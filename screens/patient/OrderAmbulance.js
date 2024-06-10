@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput, ScrollView,
+  TextInput,
+  ScrollView,
 } from 'react-native';
 import {COLORS} from '../../constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -88,11 +89,12 @@ const OrderAmbulance = ({navigation}) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.sectionText}>
+      
+      {/* <View style={styles.section}>
+         <Text style={styles.sectionText}>
           Select location from Google Maps:
-        </Text>
-        {/* <MapView
+        </Text> 
+      <MapView
           style={styles.map}
           initialRegion={{
             latitude: 0.3152,
@@ -104,10 +106,9 @@ const OrderAmbulance = ({navigation}) => {
           {selectedLocation && ( // Render marker if location is selected
             <Marker coordinate={selectedLocation} />
           )}
-        </MapView> */}
-        
-        
-      </View>
+        </MapView>    
+      </View> */}
+
       <View style={styles.section}>
         <Text style={styles.sectionText}>Location:</Text>
         <TextInput
