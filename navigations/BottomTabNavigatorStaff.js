@@ -10,6 +10,7 @@ import {
   StaffPatientAdmission,
   StaffDashboard,
   StaffAccount,
+  StaffBlogs,
 } from '../screens';
 import {COLORS} from '../constants';
 
@@ -83,7 +84,7 @@ const Index = () => {
             <Icon name="newspaper-o" color={color} size={size} />
           ),
         }}
-        component={PatientBlogs}
+        component={StaffBlogs}
       />
     </Tab.Navigator>
   );

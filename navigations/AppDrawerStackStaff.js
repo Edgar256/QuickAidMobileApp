@@ -10,7 +10,7 @@ import Animated from 'react-native-reanimated';
 // CUSTOM IMPORTS
 import BottomTabNavigatorStaff from './BottomTabNavigatorStaff';
 
-import {PatientInviteFriends, StaffLogout} from '../screens';
+import { StaffInviteFriends} from '../screens';
 import {COLORS} from '../constants';
 import {
   View,
@@ -146,7 +146,7 @@ function AppDrawerStack() {
       />
       <Drawer.Screen
         name="Invite Friends to QuickAid"
-        component={PatientInviteFriends}
+        component={StaffInviteFriends}
         options={HEADER_OPTIONS}
       />
       {/* <Drawer.Screen

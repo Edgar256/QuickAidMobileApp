@@ -13,7 +13,7 @@ export default function Index({navigation}) {
 
   const getBlogs = async () => {
     try {
-      const res = await axiosClient.get('/users/getAllBlogs');
+      const res = await axiosClient.get('/staff/getAllBlogs');
 
       if (res.status === 200) {
         setBlogs(res.data.message);
@@ -32,7 +32,7 @@ export default function Index({navigation}) {
   const handleOpenBlog = data => {
     try {
       // AsyncStorage.setItem('currentBlogId', id);
-      return navigation.navigate('PatientBlog', data);
+      return navigation.navigate('StaffBlog', data);
     } catch (error) {}
   };
 

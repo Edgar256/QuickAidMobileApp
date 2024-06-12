@@ -27,10 +27,10 @@ function Index({navigation}) {
 
   const getUser = async () => {
     try {
-      const res = await axiosClient.get('/users/getUser');
+      const res = await axiosClient.get('/staff/getStaff');
 
       if (res.status === 200) {
-        if (res.data.message.role !== 'USER')
+        if (res.data.message.role !== 'STAFF')
           return navigation.navigate('Welcome');
         setUser(res.data.message);
         return setIsLoading(false);

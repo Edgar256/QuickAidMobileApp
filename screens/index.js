@@ -22,6 +22,9 @@ import StaffDispatchHistory from './staff/DispatchHistory';
 import StaffPatientAdmission from './staff/PatientAdmission';
 import StaffSettings from './staff/Settings';
 import StaffTracking from './staff/Tracking';
+import StaffBlogs from './staff/Blogs';
+import StaffBlog from './staff/Blog';
+import StaffInviteFriends from './staff/InviteFriends';
 import StaffLogout from './staff/Logout';
 
 import SplashScreen from './SplashScreen';
@@ -56,6 +59,9 @@ export {
   StaffDispatchHistory,
   StaffPatientAdmission,
   StaffSettings,
+  StaffBlogs,
+  StaffBlog,
   StaffTracking,
+  StaffInviteFriends,
   StaffLogout,
 };
