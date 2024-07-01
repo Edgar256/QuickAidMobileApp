@@ -42,7 +42,7 @@ const Index = () => {
         axiosClient
           .get(`${apiURL}/staff/getCompletedAmbulanceOrders`)
           .then(res => {
-            setOrders([...res.data.message]);
+            setOrders([...res.data.message.reverse()]);
             return setIsLoading(false);
           });
       } catch (error) {}
@@ -58,7 +58,7 @@ const Index = () => {
     try {
       setRefreshing(true);
       axiosClient.get(`${apiURL}/staff/getStaff`).then(res => {
-        setStaff({...res.data.message});
+        setStaff({...res.data.message.reverse()});
         return setIsLoading(false);
       });
       axiosClient
@@ -88,11 +88,15 @@ const Index = () => {
 
   const renderItem = ({item}) => (
     <TouchableOpacity style={styles.card}>
-      <View style={styles.cardInner} onPress={() => acceptOrder(item.id)}>
-        <Image
-          source={require('../../assets/images/default-user-image.jpg')}
-          style={styles.image}
-        />
+      <View style={styles.cardInner} onPress={() => acceptOrder(item.id)}>        
+         {item?.user?.photo ? (
+          <Image source={{uri: item?.user?.photo}} style={styles.image} />
+        ) : (
+          <Image
+            source={require('../../assets/images/default-user-image.jpg')}
+            style={styles.image}
+          />
+        )}
         <View style={styles.details}>
           <Text style={styles.text}>{item?.user?.name}</Text>
           <Text style={styles.text}>{item?.user?.phone}</Text>
@@ -107,6 +111,15 @@ const Index = () => {
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
+      {item.photoUrl && (
+        <Image
+          source={{
+            uri: item.photoUrl,
+          }}
+          resizeMode="cover"
+          style={styles.imageOrder}
+        />
+      )}
     </TouchableOpacity>
   );
 
@@ -228,6 +241,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     color: '#666',
+  },
+  imageOrder: {
+    width: '100%', // Make the image fill the entire width of the container
+    height: undefined, // Allow the height to adjust according to the aspect ratio
+    aspectRatio: 5 / 3, // Maintain the aspect ratio
+    borderRadius: 5,
   },
 });
 

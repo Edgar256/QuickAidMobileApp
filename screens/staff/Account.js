@@ -1,13 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  RefreshControl,
-  ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import axiosClient from '../../utils/axiosClient';
 import moment from 'moment';
 import Spinner from '../../components/Spinner';
@@ -16,7 +8,6 @@ import {COLORS} from '../../constants';
 const Index = ({navigation}) => {
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
 
   const getUser = async () => {
     try {
@@ -36,48 +27,47 @@ const Index = ({navigation}) => {
     getUser();
   }, []);
 
-  const onRefresh = React.useCallback(async () => {
-    try {
-      setRefreshing(true);
-      axiosClient.get(`${apiURL}/staff/getStaff`).then(res => {
-        setUser({...res.data.message});
-        return setIsLoading(false);
-      });
-      setRefreshing(false);
-    } catch (error) {}
-  });
-
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      <Text style={styles.header}>Staff Personal Details</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>Personal Details</Text>
       {isLoading ? (
         <Spinner />
       ) : (
         <View>
-          <View style={styles.detailsContainer}>
-            <Text style={styles.label}>Name: {user.name}</Text>
+          <View style={styles.imageContainer}>
+            {user?.photo ? (
+              <Image source={{ uri: user?.photo }} style={styles.image} />
+            ) : (
+              <Image
+                source={require('../../assets/images/default-user-image.jpg')}
+                style={styles.image}
+              />
+            )}            
           </View>
           <View style={styles.detailsContainer}>
-            <Text style={styles.value}>Email :{user.email}</Text>
+            <Text style={styles.value}>Name: {user.name}</Text>
           </View>
           <View style={styles.detailsContainer}>
-            <Text style={styles.value}>Phone :{user.phone}</Text>
+            <Text style={styles.value}>Email: {user.email}</Text>
+          </View>
+          <View style={styles.detailsContainer}>
+            <Text style={styles.value}>Phone: {user.phone}</Text>
           </View>
           <View style={styles.detailsContainer}>
             <Text style={styles.value}>
-              Date Registered :{moment(user.createdAt).format('LLLL')}
+              Date Registered: {moment(user.createdAt).format('LLLL')}
             </Text>
           </View>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Update Details</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('StaffUpdateDetails')}
+            style={styles.button}>
+            <Text style={styles.buttonText}>
+               Update Profile
+            </Text>
           </TouchableOpacity>
         </View>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
@@ -103,11 +93,22 @@ const styles = StyleSheet.create({
   value: {
     flex: 2,
   },
+  imageContainer: {
+    alignItems: 'center',
+    padding: 20,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+  },
   button: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.danger,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    textAlign: 'center',
+    marginVertical: 10,
   },
   buttonText: {
     color: 'white',

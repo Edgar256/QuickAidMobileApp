@@ -10,6 +10,7 @@ import PatientRequests from './patient/Requests';
 import PatientHistory from './patient/History';
 import PatientInviteFriends from './patient/InviteFriends';
 import PatientOrderAmbulance from './patient/OrderAmbulance';
+import PatientUpdateDetails from './patient/UpdateDetails';
 import PatientLogout from './patient/Logout';
 
 import StaffLogin from './staff/Login';
@@ -25,6 +26,7 @@ import StaffTracking from './staff/Tracking';
 import StaffBlogs from './staff/Blogs';
 import StaffBlog from './staff/Blog';
 import StaffInviteFriends from './staff/InviteFriends';
+import StaffUpdateDetails from './staff/UpdateDetails';
 import StaffLogout from './staff/Logout';
 
 import SplashScreen from './SplashScreen';
@@ -47,6 +49,7 @@ export {
   PatientHistory,
   PatientInviteFriends,
   PatientOrderAmbulance,
+  PatientUpdateDetails,
   PatientLogout,
 
   // Staff Screens
@@ -63,5 +66,6 @@ export {
   StaffBlog,
   StaffTracking,
   StaffInviteFriends,
+  StaffUpdateDetails,
   StaffLogout,
 };

@@ -86,7 +86,7 @@ const Index = () => {
     const getOrders = async () => {
       try {
         axiosClient.get(`${apiURL}/staff/getAmbulanceOrders`).then(res => {
-          setOrders([...res.data.message]);
+          setOrders([...res.data.message.reverse()]);
           return setIsLoading(false);
         });
       } catch (error) {}
@@ -106,7 +106,7 @@ const Index = () => {
         .then(res => {
           if (res.status === 200) {
             axiosClient.get(`${apiURL}/staff/getAmbulanceOrders`).then(res => {
-              setOrders([...res.data.message]);
+              setOrders([...res.data.message.reverse()]);
               setIsProcessing(false);
               return setIsLoading(false);
             });
@@ -120,10 +120,14 @@ const Index = () => {
   const renderItem = ({item}) => (
     <View style={styles.card}>
       <View style={styles.cardInner}>
-        <Image
-          source={require('../../assets/images/default-user-image.jpg')}
-          style={styles.image}
-        />
+        {item?.user?.photo ? (
+          <Image source={{uri: item?.user?.photo}} style={styles.image} />
+        ) : (
+          <Image
+            source={require('../../assets/images/default-user-image.jpg')}
+            style={styles.image}
+          />
+        )}
         <View style={styles.details}>
           <Text style={styles.text}>{item?.user?.name}</Text>
           <Text style={styles.text}>{item?.user?.phone}</Text>
@@ -138,6 +142,15 @@ const Index = () => {
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
+      {item.photoUrl && (
+        <Image
+          source={{
+            uri: item.photoUrl,
+          }}
+          resizeMode="cover"
+          style={styles.imageOrder}
+        />
+      )}
       {isProcessing ? (
         <Spinner />
       ) : (
@@ -158,7 +171,7 @@ const Index = () => {
         return setIsLoading(false);
       });
       axiosClient.get(`${apiURL}/staff/getAmbulanceOrders`).then(res => {
-        setOrders([...res.data.message]);
+        setOrders([...res.data.message.reverse()]);
         return setIsLoading(false);
       });
       setRefreshing(false);
@@ -296,6 +309,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     color: '#666',
+  },
+  imageOrder: {
+    width: '100%', // Make the image fill the entire width of the container
+    height: undefined, // Allow the height to adjust according to the aspect ratio
+    aspectRatio: 5 / 3, // Maintain the aspect ratio
+    borderRadius: 5,
   },
 });
 

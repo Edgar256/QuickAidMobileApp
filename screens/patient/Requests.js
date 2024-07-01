@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
   Image,
   RefreshControl,
   ScrollView,
@@ -59,24 +58,37 @@ const Index = () => {
   const renderAmbulanceRequest = ({item}) => (
     <View style={styles.card}>
       <View style={styles.cardInner}>
-        <Image
-          source={require('../../assets/images/default-user-image.jpg')}
-          style={styles.image}
-        />
+        {item?.staff?.photo ? (
+          <Image source={{uri: item?.staff?.photo}} style={styles.image} />
+        ) : (
+          <Image
+            source={require('../../assets/images/default-user-image.jpg')}
+            style={styles.image}
+          />
+        )}
         <View style={styles.details}>
           <Text style={styles.text}>{item?.staff?.name}</Text>
           <Text style={styles.text}>{item?.staff?.phone}</Text>
           <Text style={styles.text}>{item?.staff?.email}</Text>
-          <Text style={styles.text}> {item.location}</Text>
           <View style={styles.line} />
         </View>
       </View>
       <Text style={styles.text}>{item?.healthCondition}</Text>
+      <Text style={styles.text}> {item.location}</Text>
       <Text style={styles.text}>{item?.notes}</Text>
       <Text style={styles.text}>Status: {item.status}</Text>
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
-      </Text>      
+      </Text>
+      {item?.photoUrl && (
+        <Image
+          source={{
+            uri: item?.photoUrl,
+          }}
+          resizeMode="cover"
+          style={styles.imageOrder}
+        />
+      )}
     </View>
   );
 
@@ -168,8 +180,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     borderRadius: 75,
     marginRight: 10,
   },
@@ -185,6 +197,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     color: '#666',
+  },
+  imageOrder: {
+    width: '100%', // Make the image fill the entire width of the container
+    height: undefined, // Allow the height to adjust according to the aspect ratio
+    aspectRatio: 5 / 3, // Maintain the aspect ratio
+    borderRadius: 5,
   },
 });
 

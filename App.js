@@ -21,6 +21,8 @@ import {
   StaffRegister,
   StaffBlogs,
   StaffBlog,
+  PatientUpdateDetails,
+  StaffUpdateDetails,
 } from './screens';
 
 const theme = {
@@ -97,6 +99,13 @@ export default function App() {
             }}
             component={PatientOrderAmbulance}
           />
+          <Stack.Screen
+            name="PatientUpdateDetails"
+            options={{
+              headerShown: true,
+            }}
+            component={PatientUpdateDetails}
+          />
 
           {/* Staff Screens */}
           <Stack.Screen
@@ -126,6 +135,13 @@ export default function App() {
               headerShown: true,
             }}
             component={StaffBlog}
+          />
+          <Stack.Screen
+            name="StaffUpdateDetails"
+            options={{
+              headerShown: true,
+            }}
+            component={StaffUpdateDetails}
           />
 
           {/* Other Screens */}

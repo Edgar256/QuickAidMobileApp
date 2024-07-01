@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import axiosClient from '../../utils/axiosClient';
 import moment from 'moment';
 import Spinner from '../../components/Spinner';
+import {COLORS} from '../../constants';
 
 const Index = ({navigation}) => {
   const [user, setUser] = useState({});
@@ -33,6 +34,16 @@ const Index = ({navigation}) => {
         <Spinner />
       ) : (
         <View>
+          <View style={styles.imageContainer}>
+            {user?.photo ? (
+              <Image source={{ uri: user?.photo }} style={styles.image} />
+            ) : (
+              <Image
+                source={require('../../assets/images/default-user-image.jpg')}
+                style={styles.image}
+              />
+            )}            
+          </View>
           <View style={styles.detailsContainer}>
             <Text style={styles.value}>Name: {user.name}</Text>
           </View>
@@ -47,6 +58,13 @@ const Index = ({navigation}) => {
               Date Registered: {moment(user.createdAt).format('LLLL')}
             </Text>
           </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PatientUpdateDetails')}
+            style={styles.button}>
+            <Text style={styles.buttonText}>
+              Update Medical History and Update Profile
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -74,6 +92,29 @@ const styles = StyleSheet.create({
   },
   value: {
     flex: 2,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    padding: 20,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+  },
+  button: {
+    backgroundColor: COLORS.danger,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

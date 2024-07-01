@@ -6,48 +6,39 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Image,
 } from 'react-native';
 import {COLORS} from '../../constants';
 import axiosClient from '../../utils/axiosClient';
 import AlertDanger from '../../components/AlertDanger';
 import AlertSuccess from '../../components/AlertSuccess';
 import Spinner from '../../components/Spinner';
+import {launchImageLibrary} from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 
 const OrderAmbulance = ({navigation}) => {
   const [location, setLocation] = useState('');
   const [healthCondition, setHealthCondition] = useState('');
   const [notes, setNotes] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState(null);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [imageUri, setImageUri] = useState(null);
+  const [orders, setOrders] = useState([]);
 
-  const handleMapPress = event => {
-    // Handle map press to set selected location
-    const coordinate = event.nativeEvent.coordinate;
-    setSelectedLocation(coordinate);
+  const selectImage = () => {
+    launchImageLibrary({mediaType: 'photo'}, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const uri = response.assets[0].uri;
+        setImageUri(uri);
+      }
+    });
   };
-
-  //   const handleChoosePhoto = () => {
-  //     const options = {
-  //       title: 'Select Photo',
-  //       storageOptions: {
-  //         skipBackup: true,
-  //         path: 'images',
-  //       },
-  //     };
-
-  //     ImagePicker.showImagePicker(options, response => {
-  //       if (response.didCancel) {
-  //         console.log('User cancelled image picker');
-  //       } else if (response.error) {
-  //         console.log('ImagePicker Error: ', response.error);
-  //       } else {
-  //         const source = { uri: response.uri };
-  //         setPhoto(source);
-  //       }
-  //     });
-  //   };
 
   const handleOrderSubmit = async () => {
     setSuccessMessage('');
@@ -63,7 +54,30 @@ const OrderAmbulance = ({navigation}) => {
     if (!notes) return setError('Please add a Notes');
     setError('');
 
-    const payload = {location, healthCondition, notes};
+    const formData = new FormData();
+    formData.append('file', {
+      uri: imageUri,
+      type: 'image/jpeg',
+      name: 'upload.jpg',
+    });
+    formData.append('upload_preset', 'realtorsUg');
+
+    const response = await axios.post(
+      'https://api.cloudinary.com/v1_1/pixabits-group-limited/image/upload', // Replace with your cloud name
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    const payload = {
+      location,
+      healthCondition,
+      notes,
+      photoUrl: response.data.secure_url,
+    };
     console.log(payload);
     setIsLoading(true);
     const res = await axiosClient.post('/users/createAmbulanceOrder', payload);
@@ -115,16 +129,38 @@ const OrderAmbulance = ({navigation}) => {
           numberOfLines={4}
         />
       </View>
-      {/* <View style={styles.section}>
-        <Text style={styles.sectionText}>Select Photo:</Text>
-        <TouchableOpacity style={styles.photoButton} onPress={handleChoosePhoto}>
-          <Icon name="camera" size={24} color={COLORS.gray} />
-          <Text style={styles.photoButtonText}>Choose Photo</Text>
-        </TouchableOpacity>
-        {photo && (
-          <Image source={photo} style={styles.photoPreview} />
-        )}
-      </View> */}
+      <View style={styles.section}>
+        <Text style={styles.sectionText}>Add photo patient's condition:</Text>
+        <View style={styles.imageContainer}>
+          {imageUri ? (
+            <Image
+              source={{
+                uri: imageUri,
+              }}
+              style={styles.image}
+            />
+          ) : (
+            <Image
+              source={require('../../assets/images/default-image.png')}
+              style={styles.image}
+            />
+          )}
+          <TouchableOpacity
+            onPress={selectImage}
+            style={{
+              backgroundColor: '#f5f5f5',
+              paddingVertical: 20,
+              paddingHorizontal: 20,
+              borderRadius: 5,
+              textAlign: 'center',
+              marginTop: -60,
+              marginRight: -200,
+              borderRadius: 25,
+            }}>
+            <Icon name="camera" color={COLORS.black} size={45} />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       {error && <AlertDanger text={error} />}
       {successMessage && <AlertSuccess text={successMessage} />}
@@ -149,11 +185,11 @@ const styles = StyleSheet.create({
   section: {
     backgroundColor: COLORS.white,
     padding: 10,
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 5,
+    marginBottom: 2,
   },
   sectionText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   input: {
     borderWidth: 1,
@@ -168,6 +204,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 30,
+    marginTop: 30,
   },
   buttonText: {
     color: COLORS.white,
@@ -176,6 +213,15 @@ const styles = StyleSheet.create({
   },
   map: {
     height: 250,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    padding: 20,
+  },
+  image: {
+    width: 250,
+    height: 150,
+    borderRadius: 5,
   },
 });
 
