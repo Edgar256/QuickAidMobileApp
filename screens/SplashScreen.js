@@ -23,7 +23,6 @@ export default function SplashScreen({navigation}) {
     (async () => {
       await AsyncStorage.getItem('token')
         .then(res => {
-          // console.log({res:jwt_decode(res)})
           if (!jwt_decode(res).id) {
             setTimeout(() => {
               navigation.navigate('Start');

@@ -121,7 +121,6 @@ export default function Register({navigation}) {
               return navigation.navigate('StaffLogin');
             }, 2000);
           } else {
-            console.log(res);
             setError('Failed to sign up. Please try again.');
             return setIsLoading(false);
           }
@@ -129,8 +128,7 @@ export default function Register({navigation}) {
         .finally(() => {
           setIsLoading(false);
         });
-    } catch (err) {
-      console.log({err: err.status});
+    } catch (err) {      
       setError('Error creating account');
       return err;
     }
@@ -157,8 +155,7 @@ export default function Register({navigation}) {
                   color: COLORS.black,
                   fontWeight: '300',
                   textAlign: 'center',
-                  fontSize: 16,
-                  color:COLORS.white
+                  fontSize: 16
                 }}>
                 Medical Personel Registration
               </Text>

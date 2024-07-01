@@ -42,8 +42,7 @@ export default function Index({navigation}) {
           return navigation.navigate('Welcome');
         setUser(res.data.message);
         return setIsLoading(false);
-      } else {
-        console.log('User is not authenticated');
+      } else {        
         setIsLoading(false);
         return navigation.navigate('Welcome');
       }
@@ -294,10 +293,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: '#f5f5f5',
     marginVertical: 10,
-  },
-  text: {
-    fontSize: 14,
-    color: '#666',
   },
   imageOrder: {
     width: '100%', // Make the image fill the entire width of the container

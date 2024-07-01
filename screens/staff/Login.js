@@ -68,7 +68,6 @@ export default function Login({navigation}) {
       axios
         .post(`${apiURL}/staff/signin`, payload)
         .then(res => {
-          console.log(res)
           if(res.status === 404){
             setError(res.data.error)
             setIsLoading(false)

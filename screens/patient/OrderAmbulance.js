@@ -30,9 +30,8 @@ const OrderAmbulance = ({navigation}) => {
   const selectImage = () => {
     launchImageLibrary({mediaType: 'photo'}, response => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        return
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
       } else {
         const uri = response.assets[0].uri;
         setImageUri(uri);
@@ -78,7 +77,6 @@ const OrderAmbulance = ({navigation}) => {
       notes,
       photoUrl: response.data.secure_url,
     };
-    console.log(payload);
     setIsLoading(true);
     const res = await axiosClient.post('/users/createAmbulanceOrder', payload);
 
@@ -141,7 +139,7 @@ const OrderAmbulance = ({navigation}) => {
             />
           ) : (
             <Image
-              source={require('../../assets/images/default-image.png')}
+              source={require('../../assets/images/default-image.jpg')}
               style={styles.image}
             />
           )}
@@ -155,7 +153,6 @@ const OrderAmbulance = ({navigation}) => {
               textAlign: 'center',
               marginTop: -60,
               marginRight: -200,
-              borderRadius: 25,
             }}>
             <Icon name="camera" color={COLORS.black} size={45} />
           </TouchableOpacity>

@@ -162,8 +162,7 @@ export default function Register({navigation}) {
                   color: COLORS.black,
                   fontWeight: '300',
                   textAlign: 'center',
-                  fontSize: 16,
-                  color:COLORS.white
+                  fontSize: 16
                 }}>
                 Patient Registration
               </Text>

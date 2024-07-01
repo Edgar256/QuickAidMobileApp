@@ -13,9 +13,7 @@ const Index = ({navigation}) => {
   const [emergencyType, setEmergencyType] = useState('');
 
   const handleDispatch = () => {
-    // Implement ambulance dispatch logic here
-    console.log('Dispatching ambulance to:', destination);
-    console.log('Emergency type:', emergencyType);
+    
     // Assuming a successful dispatch, navigate to another screen
     navigation.navigate('DispatchConfirmation');
   };

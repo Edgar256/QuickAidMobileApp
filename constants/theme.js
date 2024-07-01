@@ -11,11 +11,9 @@ export const COLORS = {
 
   primary: '#DF3A26',
   secondary: '#EE4D9C',
-  success: '#A8DD1F',
   danger: '#ED1C24',
   lightGreen:"#00ff3c8c",
   
-
   // colors
   black: '#0A0A0A',
   blackLight: '#333332',
@@ -55,8 +53,6 @@ export const SIZES = {
   text6: 22,
   text7: 24,
   text8: 26,
-  text8: 28,
-  text8: 30,
 
   // app dimensions
   windowWidth,

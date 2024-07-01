@@ -17,7 +17,6 @@ const Index = ({navigation}) => {
         setUser(res.data.message);
         return setIsLoading(false);
       } else {
-        console.log('User is not authenticated');
         return navigation.navigate('Welcome');
       }
     } catch (error) {}

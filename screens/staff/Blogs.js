@@ -19,7 +19,7 @@ export default function Index({navigation}) {
         setBlogs(res.data.message);
         return setIsLoading(false);
       } else {
-        console.log('User is not authenticated');
+        return
         // return navigation.navigate('Welcome');
       }
     } catch (error) {}

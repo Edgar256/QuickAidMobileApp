@@ -35,9 +35,6 @@ const Index = () => {
         socket.on('connect', async () => {
           try {
             const token = await AsyncStorage.getItem('token');
-            console.log({connected: socket.connected});
-            console.log('Client Connected');
-            console.log({id: socket.id});
             socket.emit('authenticate', {token}); // Replace with actual token
 
             socket.on('text', () => {
@@ -49,7 +46,7 @@ const Index = () => {
             });
 
             socket.on('disconnect', () => {
-              console.log('Socket disconnected');
+              return;
             });
 
             // socket.on('orders', data => {
@@ -63,11 +60,11 @@ const Index = () => {
               }
             };
           } catch (error) {
-            console.log({error});
+            return;
           }
         });
       } catch (error) {
-        console.log({error});
+        return;
       }
     };
 

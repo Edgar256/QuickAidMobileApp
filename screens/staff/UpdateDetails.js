@@ -39,9 +39,9 @@ const Index = ({navigation}) => {
   const selectImage = () => {
     launchImageLibrary({mediaType: 'photo'}, response => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        return
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        return
       } else {
         const uri = response.assets[0].uri;
         setImageUri(uri);
@@ -89,9 +89,8 @@ const Index = ({navigation}) => {
           return setIsLoading(false);
         }
       });
-    } catch (error) {
-        console.log(error)
-      Alert.alert('Failed to Updated user details');
+    } catch (error) {        
+      return Alert.alert('Failed to Updated user details');
     }
   };
 
@@ -129,7 +128,6 @@ const Index = ({navigation}) => {
                 textAlign: 'center',
                 marginTop: -30,
                 marginRight: -100,
-                borderRadius: 25,
               }}>
               <Icon name="camera" color={COLORS.black} size={35} />
             </TouchableOpacity>
