@@ -57,6 +57,8 @@ const Index = ({navigation}) => {
         return;
       }
 
+      setIsLoading(true);
+
       const formData = new FormData();
       formData.append('file', {
         uri: imageUri,
@@ -81,7 +83,6 @@ const Index = ({navigation}) => {
         medicalHistory,
         photo: response.data.secure_url,
       };
-      setIsLoading(true);
 
       await axiosClient.post('/users/update', payload).then(res => {
         if (res.status === 200) {

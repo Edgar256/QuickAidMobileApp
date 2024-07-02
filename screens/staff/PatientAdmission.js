@@ -306,7 +306,6 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     fontSize: 14,
-    color: '#666',
     backgroundColor: '#FFEA00',
     paddingVertical: 1,
     paddingHorizontal: 10,

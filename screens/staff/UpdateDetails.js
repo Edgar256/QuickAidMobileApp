@@ -56,6 +56,8 @@ const Index = ({navigation}) => {
         return;
       }
 
+      setIsLoading(true);
+
       const formData = new FormData();
       formData.append('file', {
         uri: imageUri,
@@ -78,8 +80,7 @@ const Index = ({navigation}) => {
         name,
         phone,
         photo: response.data.secure_url,
-      };
-      setIsLoading(true);
+      };      
 
       await axiosClient.post('/staff/update', payload).then(res => {
         if (res.status === 200) {
