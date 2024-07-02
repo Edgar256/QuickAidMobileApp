@@ -7,6 +7,10 @@ import {
   TextInput,
   ScrollView,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import {COLORS} from '../../constants';
 import axiosClient from '../../utils/axiosClient';
@@ -30,8 +34,9 @@ const OrderAmbulance = ({navigation}) => {
   const selectImage = () => {
     launchImageLibrary({mediaType: 'photo'}, response => {
       if (response.didCancel) {
-        return
+        return;
       } else if (response.error) {
+        return;
       } else {
         const uri = response.assets[0].uri;
         setImageUri(uri);
@@ -45,13 +50,15 @@ const OrderAmbulance = ({navigation}) => {
 
     // Handle submission logic
     if (!location) return setError('Please add a location');
-    setError(''); //healthCondition
+    setError('');
 
     if (!healthCondition) return setError('Please add a health condition');
     setError('');
 
-    if (!notes) return setError('Please add a Notes');
+    if (!notes) return setError('Please add Notes');
     setError('');
+
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append('file', {
@@ -61,115 +68,118 @@ const OrderAmbulance = ({navigation}) => {
     });
     formData.append('upload_preset', 'realtorsUg');
 
-    const response = await axios.post(
-      'https://api.cloudinary.com/v1_1/pixabits-group-limited/image/upload', // Replace with your cloud name
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+    try {
+      const response = await axios.post(
+        'https://api.cloudinary.com/v1_1/pixabits-group-limited/image/upload', // Replace with your cloud name
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         },
-      },
-    );
+      );
 
-    const payload = {
-      location,
-      healthCondition,
-      notes,
-      photoUrl: response.data.secure_url,
-    };
-    setIsLoading(true);
-    const res = await axiosClient.post('/users/createAmbulanceOrder', payload);
+      const payload = {
+        location,
+        healthCondition,
+        notes,
+        photoUrl: response.data.secure_url,
+      };
 
-    if (res.status === 201) {
+      const res = await axiosClient.post(
+        '/users/createAmbulanceOrder',
+        payload,
+      );
+
+      if (res.status === 201) {
+        setIsLoading(false);
+        setSuccessMessage('Ambulance Order has been Submitted');
+        setLocation('');
+        setNotes('');
+        setHealthCondition('');
+        setTimeout(() => {
+          return navigation.navigate('AppDrawerStack');
+        }, 2000);
+      } else {
+        setIsLoading(false);
+        setError('Error requesting for Ambulance');
+        return;
+      }
+    } catch (error) {
       setIsLoading(false);
-      setSuccessMessage('Ambulance Order has been Submitted');
-      setLocation('');
-      setNotes('');
-      setLocation('');
-      setTimeout(() => {
-        return navigation.navigate('AppDrawerStack');
-      }, 2000);
-    } else {
-      setIsLoading(false);
-      setError('Error requesting for Ambulance');
-      return;
+      setError('Error uploading image');
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.sectionText}>Location:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Location"
-          value={location}
-          onChangeText={setLocation}
-        />
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionText}>Health Condition:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Health Condition"
-          value={healthCondition}
-          onChangeText={setHealthCondition}
-        />
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionText}>Notes:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Notes"
-          value={notes}
-          onChangeText={setNotes}
-          multiline
-          numberOfLines={4}
-        />
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.sectionText}>Add photo patient's condition:</Text>
-        <View style={styles.imageContainer}>
-          {imageUri ? (
-            <Image
-              source={{
-                uri: imageUri,
-              }}
-              style={styles.image}
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView style={styles.container}>
+          <View style={styles.section}>
+            <Text style={styles.sectionText}>Location:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Location"
+              value={location}
+              onChangeText={setLocation}
             />
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionText}>Health Condition:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Health Condition"
+              value={healthCondition}
+              onChangeText={setHealthCondition}
+            />
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionText}>Notes:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Notes"
+              value={notes}
+              onChangeText={setNotes}
+              multiline
+              numberOfLines={4}
+            />
+          </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionText}>
+              Add photo of patient's condition:
+            </Text>
+            <View style={styles.imageContainer}>
+              {imageUri ? (
+                <Image source={{uri: imageUri}} style={styles.image} />
+              ) : (
+                <Image
+                  source={require('../../assets/images/default-image.jpg')}
+                  style={styles.image}
+                />
+              )}
+              <TouchableOpacity
+                onPress={selectImage}
+                style={styles.cameraButton}>
+                <Icon name="camera" color={COLORS.black} size={45} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {error && <AlertDanger text={error} />}
+          {successMessage && <AlertSuccess text={successMessage} />}
+
+          {isLoading ? (
+            <Spinner />
           ) : (
-            <Image
-              source={require('../../assets/images/default-image.jpg')}
-              style={styles.image}
-            />
+            <TouchableOpacity style={styles.button} onPress={handleOrderSubmit}>
+              <Text style={styles.buttonText}>Submit Order</Text>
+            </TouchableOpacity>
           )}
-          <TouchableOpacity
-            onPress={selectImage}
-            style={{
-              backgroundColor: '#f5f5f5',
-              paddingVertical: 20,
-              paddingHorizontal: 20,
-              borderRadius: 5,
-              textAlign: 'center',
-              marginTop: -60,
-              marginRight: -200,
-            }}>
-            <Icon name="camera" color={COLORS.black} size={45} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {error && <AlertDanger text={error} />}
-      {successMessage && <AlertSuccess text={successMessage} />}
-
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={handleOrderSubmit}>
-          <Text style={styles.buttonText}>Submit Order</Text>
-        </TouchableOpacity>
-      )}
-    </ScrollView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -194,6 +204,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginTop: 5,
+    textAlignVertical: 'top',
   },
   button: {
     backgroundColor: COLORS.primary,
@@ -208,9 +219,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  map: {
-    height: 250,
-  },
   imageContainer: {
     alignItems: 'center',
     padding: 20,
@@ -219,6 +227,32 @@ const styles = StyleSheet.create({
     width: 250,
     height: 150,
     borderRadius: 5,
+  },
+  cameraButton: {
+    backgroundColor: '#f5f5f5',
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    textAlign: 'center',
+    marginTop: -60,
+    marginRight: -200,
+  },
+  imageOrder: {
+    width: '100%',
+    height: undefined,
+    aspectRatio: 5 / 3,
+    borderRadius: 5,
+  },
+  status: {
+    flexDirection: 'row',
+  },
+  badgeText: {
+    fontSize: 14,
+    backgroundColor: '#4BB543',
+    paddingVertical: 1,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    color: '#ffffff',
   },
 });
 

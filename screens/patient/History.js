@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
+  RefreshControl,
   Image,
 } from 'react-native';
 import Spinner from '../../components/Spinner';
@@ -16,6 +16,7 @@ const Index = () => {
   const [ambulanceRequests, setAmbulanceRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const getAmbulanceOrders = async () => {
     try {
@@ -31,6 +32,16 @@ const Index = () => {
       }
     } catch (error) {}
   };
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await getAmbulanceOrders();
+      setRefreshing(false);
+    } catch (error) {
+      return error;
+    }
+  }, [refreshing]);
 
   useEffect(() => {
     getAmbulanceOrders();
@@ -59,7 +70,10 @@ const Index = () => {
       <Text style={styles.text}>{item?.healthCondition}</Text>
       <Text style={styles.text}>{item.location}</Text>
       <Text style={styles.text}>{item?.notes}</Text>
-      <Text style={styles.text}>Status: {item.status}</Text>
+      <View style={styles.status}>
+        <Text style={styles.text}>Status:</Text>
+        <Text style={styles.badgeText}>{item.status}</Text>
+      </View>
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
@@ -76,19 +90,20 @@ const Index = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>History ({ambulanceRequests.length})</Text>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <FlatList
-          data={ambulanceRequests}
-          renderItem={renderAmbulanceRequest}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
-        />
-      )}
-    </View>
+    <FlatList
+      style={styles.container}
+      data={ambulanceRequests}
+      renderItem={renderAmbulanceRequest}
+      keyExtractor={item => item.id.toString()}
+      ListHeaderComponent={
+        <Text style={styles.header}>History ({ambulanceRequests.length})</Text>
+      }
+      ListFooterComponent={isLoading ? <Spinner /> : null}
+      contentContainerStyle={styles.listContainer}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    />
   );
 };
 
@@ -143,8 +158,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     borderRadius: 75,
     marginRight: 10,
   },
@@ -166,6 +181,17 @@ const styles = StyleSheet.create({
     height: undefined, // Allow the height to adjust according to the aspect ratio
     aspectRatio: 5 / 3, // Maintain the aspect ratio
     borderRadius: 5,
+  },
+  status: {
+    flexDirection: 'row',
+  },
+  badgeText: {
+    fontSize: 14,
+    backgroundColor: '#4BB543',
+    paddingVertical: 1,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    color: '#ffffff',
   },
 });
 

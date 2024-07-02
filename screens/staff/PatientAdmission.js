@@ -115,7 +115,10 @@ const Index = () => {
       </View>
       <Text style={styles.text}>{item?.healthCondition}</Text>
       <Text style={styles.text}>{item?.notes}</Text>
-      <Text style={styles.text}>Status: {item.status}</Text>
+      <View style={styles.status}>
+        <Text style={styles.text}>Status:</Text>
+        <Text style={styles.badgeText}>{item.status}</Text>
+      </View>
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
@@ -216,25 +219,25 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: COLORS.success,
-    paddingVertical: 10,
+    paddingVertical: 7,
     paddingHorizontal: 20,
     borderRadius: 5,
     textAlign: 'center',
+    marginVertical: 3,
   },
   buttonText: {
-    color: 'white',
+    color: 'black',
     fontSize: 16,
-    fontWeight: 'bold',
     textAlign: 'center',
     flex: 1,
   },
   buttonCancel: {
     backgroundColor: COLORS.white,
-    paddingVertical: 10,
+    paddingVertical: 7,
     paddingHorizontal: 20,
     borderRadius: 5,
     textAlign: 'center',
-    marginTop: 10,
+    marginVertical: 3,
   },
   buttonTextCancel: {
     color: 'black',
@@ -297,6 +300,18 @@ const styles = StyleSheet.create({
     height: undefined, // Allow the height to adjust according to the aspect ratio
     aspectRatio: 5 / 3, // Maintain the aspect ratio
     borderRadius: 5,
+  },
+  status: {
+    flexDirection: 'row',
+  },
+  badgeText: {
+    fontSize: 14,
+    color: '#666',
+    backgroundColor: '#FFEA00',
+    paddingVertical: 1,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    color: '#000000',
   },
 });
 

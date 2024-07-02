@@ -1,13 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import axiosClient from '../../utils/axiosClient';
 import moment from 'moment';
 import Spinner from '../../components/Spinner';
-import {COLORS} from '../../constants';
+import { COLORS } from '../../constants';
 
-const Index = ({navigation}) => {
+const Index = ({ navigation }) => {
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const getUser = async () => {
     try {
@@ -15,33 +24,41 @@ const Index = ({navigation}) => {
 
       if (res.status === 200) {
         setUser(res.data.message);
-        return setIsLoading(false);
+        setIsLoading(false);
       } else {
-        return navigation.navigate('Welcome');
+        navigation.navigate('Welcome');
       }
-    } catch (error) {}
+    } catch (error) {
+      setIsLoading(false);
+      navigation.navigate('Welcome');
+    }
   };
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await getUser();
+    setRefreshing(false);
+  }, []);
 
   useEffect(() => {
     getUser();
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    >
       <Text style={styles.header}>Personal Details</Text>
       {isLoading ? (
         <Spinner />
       ) : (
         <View>
           <View style={styles.imageContainer}>
-            {user?.photo ? (
-              <Image source={{ uri: user?.photo }} style={styles.image} />
-            ) : (
-              <Image
-                source={require('../../assets/images/default-user-image.jpg')}
-                style={styles.image}
-              />
-            )}            
+            <Image
+              source={user?.photo ? { uri: user.photo } : require('../../assets/images/default-user-image.jpg')}
+              style={styles.image}
+            />
           </View>
           <View style={styles.detailsContainer}>
             <Text style={styles.value}>Name: {user.name}</Text>
@@ -59,14 +76,15 @@ const Index = ({navigation}) => {
           </View>
           <TouchableOpacity
             onPress={() => navigation.navigate('StaffUpdateDetails')}
-            style={styles.button}>
+            style={styles.button}
+          >
             <Text style={styles.buttonText}>
-               Update Profile
+              Update Medical History & Profile
             </Text>
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -85,12 +103,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
   },
-  label: {
-    flex: 1,
-    fontWeight: 'bold',
-  },
   value: {
-    flex: 2,
+    fontSize: 16,
   },
   imageContainer: {
     alignItems: 'center',

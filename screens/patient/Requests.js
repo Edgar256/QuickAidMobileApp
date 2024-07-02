@@ -76,7 +76,10 @@ const Index = () => {
       <Text style={styles.text}>{item?.healthCondition}</Text>
       <Text style={styles.text}> {item.location}</Text>
       <Text style={styles.text}>{item?.notes}</Text>
-      <Text style={styles.text}>Status: {item.status}</Text>
+      <View style={styles.status}>
+        <Text style={styles.text}>Status:</Text>
+        <Text style={styles.badgeText}>{item.status}</Text>
+      </View>
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
@@ -93,25 +96,22 @@ const Index = () => {
   );
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      style={styles.container}>
+    <FlatList
+    style={styles.container}
+    data={ambulanceRequests}
+    renderItem={renderAmbulanceRequest}
+    keyExtractor={(item) => item.id.toString()}
+    ListHeaderComponent={
       <Text style={styles.header}>
         Past Ambulance Requests ({ambulanceRequests.length})
       </Text>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <FlatList
-          data={ambulanceRequests}
-          renderItem={renderAmbulanceRequest}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
-        />
-      )}
-    </ScrollView>
+    }
+    ListFooterComponent={isLoading ? <Spinner /> : null}
+    contentContainerStyle={styles.listContainer}
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }
+  />    
   );
 };
 
@@ -203,6 +203,18 @@ const styles = StyleSheet.create({
     height: undefined, // Allow the height to adjust according to the aspect ratio
     aspectRatio: 5 / 3, // Maintain the aspect ratio
     borderRadius: 5,
+  },
+  status: {
+    flexDirection: 'row',
+  },
+  badgeText: {
+    fontSize: 14,
+    color: '#666',
+    backgroundColor: '#FFEA00',
+    paddingVertical: 1,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    color: '#000000',
   },
 });
 

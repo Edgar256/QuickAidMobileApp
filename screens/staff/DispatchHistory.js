@@ -107,7 +107,10 @@ const Index = () => {
       </View>
       <Text style={styles.text}>{item?.healthCondition}</Text>
       <Text style={styles.text}>{item?.notes}</Text>
-      <Text style={styles.text}>Status: {item.status}</Text>
+      <View style={styles.status}>
+        <Text style={styles.text}>Status:</Text>
+        <Text style={styles.badgeText}>{item.status}</Text>
+      </View>
       <Text style={styles.text}>
         Date Requested: {moment(item?.createdAt).format('LLLL')}
       </Text>
@@ -242,6 +245,17 @@ const styles = StyleSheet.create({
     height: undefined, // Allow the height to adjust according to the aspect ratio
     aspectRatio: 5 / 3, // Maintain the aspect ratio
     borderRadius: 5,
+  },
+  status: {
+    flexDirection: 'row',
+  },
+  badgeText: {
+    fontSize: 14,
+    backgroundColor: '#4BB543',
+    paddingVertical: 1,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    color: '#ffffff',
   },
 });
 

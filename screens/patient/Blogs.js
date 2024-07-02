@@ -1,15 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import Spinner from '../../components/Spinner';
 import axiosClient from '../../utils/axiosClient';
-// import {limitStringLength} from '../../utils/helpers';
 import parser from 'html-react-parser';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import limitStringLength from '../../utils/limitStringLength';
 
-export default function Index({navigation}) {
-  const [blogs, setBlogs] = useState({});
+export default function Index({ navigation }) {
+  const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const getBlogs = async () => {
     try {
@@ -17,29 +24,37 @@ export default function Index({navigation}) {
 
       if (res.status === 200) {
         setBlogs(res.data.message);
-        return setIsLoading(false);
+        setIsLoading(false);
       } else {
-        return
-        // return navigation.navigate('Welcome');
+        // Handle error or navigate to error screen
+        console.error('Failed to fetch blogs');
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+    }
   };
 
   useEffect(() => {
     getBlogs();
   }, []);
 
-  const handleOpenBlog = data => {
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await getBlogs();
+    setRefreshing(false);
+  }, []);
+
+  const handleOpenBlog = (data) => {
     try {
       // AsyncStorage.setItem('currentBlogId', id);
-      return navigation.navigate('PatientBlog', data);
-    } catch (error) {}
+      navigation.navigate('PatientBlog', data);
+    } catch (error) {
+      console.error('Error opening blog:', error);
+    }
   };
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={() => handleOpenBlog(item)}>
+  const renderItem = ({ item }) => (
+    <TouchableOpacity style={styles.itemContainer} onPress={() => handleOpenBlog(item)}>
       <Text style={styles.title}>{limitStringLength(item.title, 0, 50)}</Text>
       <Text style={styles.content}>
         {limitStringLength(parser(item.content), 0, 200)}
@@ -49,17 +64,24 @@ export default function Index({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome to our Blog !</Text>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <FlatList
-          data={blogs}
-          renderItem={renderItem}
-          keyExtractor={item => item.id.toString()}
-          contentContainerStyle={styles.listContainer}
-        />
-      )}
+      <Text style={styles.text}>Welcome to our Blog!</Text>
+      <ScrollView
+        style={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <FlatList
+            data={blogs}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+            contentContainerStyle={styles.listContainer}
+          />
+        )}
+      </ScrollView>
     </View>
   );
 }
@@ -74,6 +96,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     marginVertical: 8,
+  },
+  scrollView: {
+    flex: 1,
   },
   listContainer: {
     paddingBottom: 20,

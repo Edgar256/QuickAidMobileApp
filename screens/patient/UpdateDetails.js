@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray,
     borderRadius: 5,
     padding: 5,
+    textAlignVertical: 'top',
     // marginTop: 5,
   },
   value: {
